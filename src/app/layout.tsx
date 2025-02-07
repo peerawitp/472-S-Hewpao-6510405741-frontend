@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Navbar from "./component/Navbar";
 import NextAuthProvider from "@/provider/NextAuthProvider";
 import QueryClientProvider from "@/provider/QueryClientProvider";
 
@@ -21,9 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <NextAuthProvider>
@@ -31,7 +30,12 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
-            {children}
+            <div>
+              <header className="sticky top-0">
+                <Navbar />
+              </header>
+              <main>{children}</main>
+            </div>
           </body>
         </QueryClientProvider>
       </NextAuthProvider>
