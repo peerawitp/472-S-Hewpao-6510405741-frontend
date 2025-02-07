@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 
 const Navbar = () => {
@@ -40,6 +40,12 @@ const Navbar = () => {
               <span className="text-sm text-gray-600">
                 {session.data.user.email}
               </span>
+              <button
+                onClick={() => signOut()}
+                className="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                Logout
+              </button>
             </div>
           ) : (
             <button
