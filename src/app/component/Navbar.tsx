@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useState } from "react";
 
@@ -13,7 +13,6 @@ const Navbar = () => {
   if (session.status === "authenticated") {
     console.log(session.data);
   }
-
   const handleFacebookSignIn = async () => {
     const res = await signIn("facebook");
     console.log(res);
@@ -33,7 +32,15 @@ const Navbar = () => {
   return (
     <>
       <nav className="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
-        <div className="text-xl font-bold text-[#171717]">HewPao</div>
+        <Link href="/">
+          <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
+        </Link>
+
+        <div>
+          <Link href="/order" className="font-bold hover:text-gray-600">
+            Order
+          </Link>
+        </div>
         <div>
           {session.data && session.data.user ? (
             <div className="flex items-center gap-4">
@@ -50,7 +57,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#494949] text-sm h-10 px-4 cursor-pointer"
+              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 hover:bg-gray-600 text-sm h-10 px-4 cursor-pointer text-[#FFFFFF] font-medium"
             >
               Sign In
             </button>
