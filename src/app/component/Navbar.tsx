@@ -35,10 +35,14 @@ const Navbar = () => {
         <Link href="/">
           <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
         </Link>
-
         <div>
           <Link href="/order" className="font-bold hover:text-gray-600">
             Order
+          </Link>
+        </div>
+        <div>
+          <Link href="/product" className="font-bold hover:text-gray-600">
+            Product
           </Link>
         </div>
         <div>
