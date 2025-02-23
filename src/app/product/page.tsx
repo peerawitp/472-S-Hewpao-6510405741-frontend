@@ -4,6 +4,7 @@ import ProductCard from "./component/card";
 import { Product } from "@/interfaces/Product";
 
 function Page() {
+  
   const mockProducts: Product[] = [
     {
       id: 1,
@@ -36,26 +37,34 @@ function Page() {
       deadline: "2025-12-31",
     },
   ];
+  const [products, setProducts] = useState<Product[]>(mockProducts);
+  const [isLoading, setIsLoading] = useState(true);
 
-    // ใช้ mockProducts เป็นค่าเริ่มต้นเพื่อลดปัญหา hydration mismatch
-    const [products, setProducts] = useState<Product[]>(mockProducts);
-    const [isLoading, setIsLoading] = useState(true);
-  
-    useEffect(() => {
-      fetch("http://localhost:9090/products")
-        .then((response) => response.json())
-        .then((data) => {
-          setProducts(data.length ? data : mockProducts);
-        })
-        .catch((error) => console.error("Error fetching products:", error))
-        .finally(() => setIsLoading(false));
-    }, []);
+  useEffect(() => {
+    fetch("http://localhost:9090/products")
+      .then((response) => response.json())
+      .then((data) => {
+        setProducts(data.length ? data : mockProducts);
+      })
+      .catch((error) => console.error("Error fetching products:", error))
+      .finally(() => setIsLoading(false));
+  }, []);
 
   return (
+    <div className="min-h-screen">
+      <div className="min-h-screen flex items-center justify-center h-full gap-6">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProductDetail(){
+  return (
     <div className="min-h-screen flex items-center justify-center h-full gap-6">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
-      ))}
+
     </div>
   );
 }

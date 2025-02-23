@@ -1,18 +1,39 @@
 "use client";
 import Link from "next/link";
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const Navbar = () => {
+  const pathname = usePathname();
   const session = useSession();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  // เพิ่ม useEffect เพื่อควบคุม scroll และ pointer events
+  useEffect(() => {
+    if (isModalOpen) {
+      // เมื่อ modal เปิด ไม่ให้ scroll หน้าหลัก
+      document.body.style.overflow = "hidden";
+      document.body.style.pointerEvents = "none";
+    } else {
+      // เมื่อ modal ปิด ให้ scroll หน้าหลักได้ตามปกติ
+      document.body.style.overflow = "auto";
+      document.body.style.pointerEvents = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isModalOpen]);
+
   if (session.status === "authenticated") {
     console.log(session.data);
   }
+
   const handleFacebookSignIn = async () => {
     const res = await signIn("facebook");
     console.log(res);
@@ -29,21 +50,62 @@ const Navbar = () => {
     console.log(res);
   };
 
+  // ป้องกัน event bubbling
+  const handleModalContentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <>
       <nav className="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
         <Link href="/">
           <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
         </Link>
-        <div>
-          <Link href="/order" className="font-bold hover:text-gray-600">
-            Order
-          </Link>
-        </div>
-        <div>
-          <Link href="/product" className="font-bold hover:text-gray-600">
+        <div className="flex gap-20">
+          <div>
+            <Link
+              href="/order"
+              className={`relative font-bold ${
+                pathname === "/order" ? "text-blue-500" : "text-gray-500"
+              } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${
+                pathname === "/order" ? "after:scale-x-100" : "after:scale-x-0"
+              } hover:after:scale-x-100 focus:after:scale-x-100`}
+            >
+              Order
+            </Link>
+          </div>
+          <div>
+            <Link
+              href="/product-requests"
+              className={`relative font-bold ${
+                pathname === "/product-requests"
+                  ? "text-blue-500"
+                  : "text-gray-500"
+              } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${
+                pathname === "/product-requests"
+                  ? "after:scale-x-100"
+                  : "after:scale-x-0"
+              } hover:after:scale-x-100 focus:after:scale-x-100`}
+            >
+              Travel
+            </Link>
+          </div>
+          <div>
+          <Link 
+          href="/product"
+          className={`relative font-bold ${
+            pathname === "/product"
+              ? "text-blue-500"
+              : "text-gray-500"
+          } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${
+            pathname === "/product"
+              ? "after:scale-x-100"
+              : "after:scale-x-0"
+          } hover:after:scale-x-100 focus:after:scale-x-100`}
+          >
             Product
           </Link>
+        </div>
         </div>
         <div>
           {session.data && session.data.user ? (
@@ -69,10 +131,18 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Auth Modal */}
+      {/* Auth Modal - ปรับปรุง CSS และ event handling */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]"
+          style={{ pointerEvents: "auto" }}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-white rounded-lg p-8 max-w-md w-full mx-4 relative"
+            onClick={handleModalContentClick}
+            style={{ pointerEvents: "auto" }}
+          >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900">
                 {isSignUp ? "Create Account" : "Welcome Back"}
@@ -148,7 +218,10 @@ const Navbar = () => {
                       : "Don't have an account? "}
                     <button
                       className="text-blue-600 hover:underline"
-                      onClick={() => setIsSignUp(!isSignUp)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsSignUp(!isSignUp);
+                      }}
                     >
                       {isSignUp ? "Sign In" : "Sign Up"}
                     </button>
@@ -164,7 +237,10 @@ const Navbar = () => {
                     </div>
                   </div>
                   <button
-                    onClick={handleGoogleSignIn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleGoogleSignIn();
+                    }}
                     className="w-full flex items-center justify-center gap-2 bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors"
                   >
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -191,7 +267,10 @@ const Navbar = () => {
                     Continue with Google
                   </button>
                   <button
-                    onClick={handleFacebookSignIn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFacebookSignIn();
+                    }}
                     className="w-full flex items-center justify-center gap-2 bg-[#1877F2] text-white rounded-lg px-4 py-2 hover:bg-[#1864F2] transition-colors"
                   >
                     <svg
@@ -208,7 +287,10 @@ const Navbar = () => {
                 <div className="space-y-4">
                   <p className="text-center text-sm text-gray-600">
                     Don't have an account?{" "}
-                    <button className="text-blue-600 hover:underline">
+                    <button
+                      className="text-blue-600 hover:underline"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       Sign up
                     </button>
                   </p>
