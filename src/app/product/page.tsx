@@ -1,70 +1,29 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ProductCard from "./component/card";
+import { products } from "@/mock-data/products";
 import { Product } from "@/interfaces/Product";
+import Link from "next/link";
 
-function Page() {
-  
-  const mockProducts: Product[] = [
-    {
-      id: 1,
-      name: "Product 1",
-      description: "Description for product 1",
-      budget: 100,
-      category: "Electronics",
-      quantity: 10,
-      imageUrl: "https://via.placeholder.com/150",
-      deadline: "2025-12-31",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      description: "Description for product 2",
-      budget: 200,
-      category: "Fashion",
-      quantity: 5,
-      imageUrl: "https://via.placeholder.com/150",
-      deadline: "2025-12-31",
-    },
-    {
-      id: 3,
-      name: "Product 3",
-      description: "Description for product 3",
-      budget: 300,
-      category: "Home",
-      quantity: 7,
-      imageUrl: "https://via.placeholder.com/150",
-      deadline: "2025-12-31",
-    },
-  ];
-  const [products, setProducts] = useState<Product[]>(mockProducts);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("http://localhost:9090/products")
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data.length ? data : mockProducts);
-      })
-      .catch((error) => console.error("Error fetching products:", error))
-      .finally(() => setIsLoading(false));
-  }, []);
-
+const ProductList: React.FC<{ products: Product[] }> = ({ products }) => {
   return (
-    <div className="min-h-screen">
-      <div className="min-h-screen flex items-center justify-center h-full gap-6">
+    <div className="overflow-x-auto whitespace-nowrap p-4">
+      <div className="grid grid-cols-2 gap-8">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <Link key={product.id} href={`/product/${product.id}`} passHref>
+              <ProductCard product={product} />
+          </Link>
         ))}
       </div>
     </div>
   );
-}
+};
 
-function ProductDetail(){
+function Page() {
   return (
-    <div className="min-h-screen flex items-center justify-center h-full gap-6">
-
+    <div className="px-8 bg-gray-50 rounded pt-[32px] pb-[32px]">
+      <h1 className="text-3xl font-bold text-gray-900 mb-6">Product List</h1>
+      <ProductList products={products} />
     </div>
   );
 }
