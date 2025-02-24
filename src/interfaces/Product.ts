@@ -1,4 +1,5 @@
 export interface Product {
+    traveler: any;
     id: string;
     name: string;
     description: string;
