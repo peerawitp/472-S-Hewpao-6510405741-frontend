@@ -35,7 +35,9 @@ const ImageUpload = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: "image/*",
+    accept: {
+      "image/*": []
+    },
     maxFiles: maxImages,
   });
 
