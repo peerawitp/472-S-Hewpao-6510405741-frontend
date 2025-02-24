@@ -18,6 +18,8 @@ interface OrderRequest {
 
 function CreateOrderPage() {
   const [step, setStep] = useState(1);
+  const customSteps = ['Product details', 'Delivery details', 'Summary'];
+
 
   const [orderData, setOrderData] = useState<OrderRequest>({
     title: "",
@@ -35,7 +37,7 @@ function CreateOrderPage() {
   const categories = ["Sneaker", "Hat", "Shirt", "Suit", "Pant", "Other"];
 
   const handleNext = () => {
-    if (step < 3) setStep(step + 1);
+    if (step < customSteps.length) setStep(step + 1);
   };
 
   const handlePrevious = () => {
@@ -76,7 +78,7 @@ function CreateOrderPage() {
       <div className="max-w-2xl w-full bg-[#FFFFFF] rounded-lg p-[16px] block">
         <div className=" mb-6">
           {/* แสดง Progress Bar */}
-          <ProgressIndicator step={step} />
+          <ProgressIndicator step={step} steps={customSteps} />
 
           {/* Step Header */}
           <h1 className="text-3xl font-bold text-gray-900 mb-6">

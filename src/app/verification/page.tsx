@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ImageUpload from "../component/ImageUpload";
 import router from "next/navigation";
-import Link from "next/link";
+import ProgressIndicator from "../component/ProgressIndicator";
 
 interface IdentityVerification {
   firstName: string;
@@ -36,6 +36,8 @@ const isFormValid = (formData: {
 };
 
 function Page() {
+  const [step, setStep] = useState(1);
+  const verificationSteps = ['Verification Started', 'Identity Checked', 'Verifying', 'Verification Complete'];
   const [formData, setFormData] = useState<IdentityVerification>({
     firstName: "",
     lastName: "",
@@ -46,7 +48,7 @@ function Page() {
     idDocuments: [],
     agreeToTerms: false,
   });
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, type, value, checked } = e.target;
     setFormData((prev) => ({
@@ -62,15 +64,32 @@ function Page() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Submitting identity verification:", formData);
+    if (step === 1 && !isFormValid(formData)) {
+      alert("Please complete all required fields before proceeding.");
+      return;
+    }
+    setStep((prev) => prev + 1);
+  };
+
+  const handleNextStep = () => {
+    if (step === 2 && !isFormValid(formData)) {
+      alert("Please complete all required fields before proceeding.");
+      return;
+    }
+    setStep((prev) => prev + 1);
+  };
+
+  const handleBackStep = () => {
+    setStep((prev) => Math.max(1, prev - 1));
   };
 
   return (
     <div className="min-h-screen p-6 flex justify-center items-start">
-      <div className="max-w-2xl w-full bg-white rounded-lg p-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">Identity Verification</h1>
-
+      <div className="max-w-4xl w-full bg-[#FFFFFF] rounded-lg p-[16px] block">
+        <ProgressIndicator step={step} steps={verificationSteps} />
+        
+        {step === 1 && (
         <form onSubmit={handleSubmit} className="space-y-6">
-
           {/* Step 1: Personal Information */}
           <div className="border-b pb-4">
             <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
@@ -196,9 +215,65 @@ function Page() {
               </button>
           </div>
         </form>
+        )}
+
+        {step === 2 && (
+          <SetStepPage 
+            formData={formData} 
+            handleBackStep={handleBackStep} 
+            handleNextStep={handleNextStep} 
+          />
+        )}
+
+        {step === 3 && (
+          <p className="text-lg text-gray-600">Verification is in progress, please wait...</p>
+        )}
+
+        {step === 4 && (
+          <p className="text-lg text-gray-600">Verification completed successfully!</p>
+        )}
+        
       </div>
     </div>
   );
 }
 
 export default Page;
+
+interface StepPageProps {
+  formData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    dob: string;
+    address: string;
+    idDocuments: File[];
+  };
+  handleBackStep: () => void;
+  handleNextStep: () => void;
+}
+
+const SetStepPage: React.FC<StepPageProps> = ({ formData, handleBackStep, handleNextStep }) => {
+  return (
+    <div>
+      <h2 className="text-lg font-semibold text-gray-800">Confirm Your Information</h2>
+      <p><strong>First Name:</strong> {formData.firstName}</p>
+      <p><strong>Last Name:</strong> {formData.lastName}</p>
+      <p><strong>Email:</strong> {formData.email}</p>
+      <p><strong>Phone:</strong> {formData.phone}</p>
+      <p><strong>Date of Birth:</strong> {formData.dob}</p>
+      <p><strong>Address:</strong> {formData.address}</p>
+      <p><strong>Uploaded Documents:</strong> {formData.idDocuments.length} file(s)</p>
+
+      <div className="flex justify-between mt-4">
+        <button onClick={handleBackStep} className="bg-gray-400 text-white px-4 py-2 rounded-lg">
+          Back
+        </button>
+        <button onClick={handleNextStep} className="bg-green-500 text-white px-4 py-2 rounded-lg">
+          Confirm & Proceed
+        </button>
+      </div>
+    </div>
+  );
+};
