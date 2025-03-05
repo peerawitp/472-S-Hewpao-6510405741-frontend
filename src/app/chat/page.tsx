@@ -1,4 +1,7 @@
 import ChatMessage from "../component/ChatMessage";
+import ChatInput from "../component/ChatInput";
+import Form from 'next/form'
+import { time } from "console";
 
 export default function ChatPage() {
 
@@ -11,30 +14,22 @@ export default function ChatPage() {
     ];
     
     const currentUserId = 1;
+    const currentChatId = 11;
 
     return (
         <div className="flex flex-col items-center h-screen gap-6">
-            <div className="flex flex-col gap-2 bg-gray-50 p-4 w-full">
+
+            <div>
+                <h1 className="text-3xl font-bold">Chat</h1>
+            </div>
+
+            <div className="flex flex-col gap-2 bg-gray-50 p-4 w-full rounded-xl">
                 {mockMessages.map((msg) => (
                     <ChatMessage key={msg.id} message={msg} self={msg.senderId === currentUserId} />
                 ))}
             </div>
-
-            <div className="w-full flex justify-center items-center gap-4 p-4">
-
-                <div className="w-full rounded-xl shadow-lg px-2 py-4">
-                    input right here
-                </div>
-
-                <div className="w-12 h-12 bg-pink-400">
-                    PHOTO
-                </div>
-
-                <button className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    Send
-                </button>
-
-            </div>
+            
+            <ChatInput currentChatId={currentChatId} currentUserId={currentUserId}/>
 
         </div>
     );
