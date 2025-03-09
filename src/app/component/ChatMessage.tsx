@@ -1,6 +1,6 @@
 interface Message {
     id: number;
-    text: string;
+    content: string;
     timestamp: string;
 }
 
@@ -8,7 +8,7 @@ export default function ChatMessage({ message, self }: { message: Message; self:
     return (
         <div className={`flex flex-col gap-1 ${self ? "items-end" : "items-start"}`}>
             <div className={`p-4 rounded-xl ${self ? "bg-black text-white rounded-tr-none" : "bg-gray-300 text-black rounded-tl-none"}`}>
-                <p>{message.text}</p>
+                <p>{message.content}</p>
             </div>
 
             <div>
