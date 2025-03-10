@@ -15,7 +15,7 @@ const MakeOfferButton = () => {
   };
 
   return (
-    <div className="w-full relative">
+    <div className="w-full">
       <button
         onClick={openPopup}
         className="bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium"
