@@ -57,11 +57,11 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="flex justify-between items-center px-6 py-4 bg-white shadow-sm">
+      <nav className="grid grid-cols-3 px-6 py-4 bg-white shadow-sm items-center">
         <Link href="/">
           <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
         </Link>
-        <div className="flex gap-20">
+        <div className="flex justify-center gap-20">
           <div>
             <Link
               href="/order"
@@ -91,23 +91,23 @@ const Navbar = () => {
             </Link>
           </div>
           <div>
-          <Link 
-          href="/product"
-          className={`relative font-bold ${
-            pathname === "/product"
-              ? "text-blue-500"
-              : "text-gray-500"
-          } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${
-            pathname === "/product"
-              ? "after:scale-x-100"
-              : "after:scale-x-0"
-          } hover:after:scale-x-100 focus:after:scale-x-100`}
-          >
-            Product
-          </Link>
+            <Link
+            href="/product"
+            className={`relative font-bold ${
+              pathname === "/product"
+                ? "text-blue-500"
+                : "text-gray-500"
+            } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${
+              pathname === "/product"
+                ? "after:scale-x-100"
+                : "after:scale-x-0"
+            } hover:after:scale-x-100 focus:after:scale-x-100`}
+            >
+              Product
+            </Link>
+          </div>
         </div>
-        </div>
-        <div>
+        <div className="flex justify-end">
           {session.data && session.data.user ? (
             <div className="flex items-center gap-4">
               <span className="text-sm text-gray-600">
