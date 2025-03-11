@@ -1,4 +1,10 @@
+import InputFieldGroup from "@/app/component/InputFieldGroup";
 import React from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // นำเข้า CSS
+import ProvinceDropdown from "./Province";
+import DistrictsDropdown from "./Districts";
+import SubdistrictsDropdown from "./Subdistricts";
 
 interface PersonalInfoFormProps {
   formData: any;
@@ -6,38 +12,175 @@ interface PersonalInfoFormProps {
 }
 
 const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleChange }) => {
+
+  const handleDateChange = (name: string, date: Date | null) => {
+    const event = {
+      target: {
+        name,
+        value: date ? date.toISOString() : ""
+      }
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleChange(event);
+  };
+
+  const handleProvinceChange = (province: string | null) => {
+    const event = {
+      target: {
+        name: "province",
+        value: province ? province.toString() : "",
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleChange(event);
+  };
+
+  const handleDistrictChange = (district: string | null) => {
+    const event = {
+      target: {
+        name: "district",
+        value: district ? district.toString() : "",
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleChange(event);
+  };
+
+  const handleSubDistrictChange = (subdistrict: string | null) => {
+    const event = {
+      target: {
+        name: "subdistrict",
+        value: subdistrict ? subdistrict.toString() : "",
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleChange(event);
+  };
+
+  const convertToBuddhistYear = (date: Date | null) => {
+    if (!date) return null;
+    const buddhistYear = date.getFullYear() + 543;
+    return `${date.getDate()}/${date.getMonth() + 1}/${buddhistYear}`;
+  };
+  
+  const convertToGregorianDate = (dateString: string) => {
+    if (!dateString) return null;
+    const [day, month, year] = dateString.split("/").map(Number);
+    return new Date(year - 543, month - 1, day);
+  };
+
   return (
     <div className="border-b pb-4">
       <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
+    
+      {/* ID Number */}
+      <InputFieldGroup fields={
+        [{ label: "ID Number", name: "IDNumber" }
 
-      {[
-        { label: "ID Number", name: "IDNumber" },
-        { label: "First Name (Thai)", name: "firstNameTh" },
-        { label: "Last Name (Thai)", name: "lastNameTh" },
-        { label: "First Name (English)", name: "firstNameEn" },
-        { label: "Last Name (English)", name: "lastNameEn" },
-        { label: "Date of Birth (Thai)", name: "dobTh" },
-        { label: "Date of Birth (English)", name: "dobEn" },
-        { label: "Address", name: "address" },
-        { label: "Sub District", name: "subDistrict" },
-        { label: "District", name: "district" },
-        { label: "Province", name: "province" },
-        { label: "Postal Code", name: "postalCode" },
-      ].map(({ label, name }) => (
-        <div className="mt-4" key={name}>
-          <label className="block text-sm font-medium text-gray-700">{label}</label>
-          <input
-            type="text"
-            name={name}
-            value={formData[name]}
-            onChange={handleChange}
-            className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
-            required
+        ]
+      } formData={formData} handleChange={handleChange} />
+
+      {/* Infomation TH */}
+      <div className="mt-4 flex gap-4">
+        {/* First Name */}
+        <div className="w-1/2">
+          <InputFieldGroup 
+            fields={[{ label: "First Name (Thai)", name: "firstNameTh" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
           />
         </div>
-      ))}
+
+        {/* Last Name*/}
+        <div className="w-1/2">
+          <InputFieldGroup 
+            fields={[{ label: "Last Name (Thai)", name: "lastNameTh" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
+          />
+        </div>
+      </div>
+
+      {/* Infomation EN */}
+      <div className="mt-4 flex gap-4">
+        {/* First Name*/}
+        <div className="w-1/2">
+          <InputFieldGroup 
+            fields={[{ label: "First Name (English)", name: "firstNameEn" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
+          />
+        </div>
+
+        {/* Last Name */}
+        <div className="w-1/2">
+          <InputFieldGroup 
+            fields={[{ label: "Last Name (English)", name: "lastNameEn" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
+          />
+        </div>
+      </div>
+
+      {/* Date of Birth */}
+      <div className="mt-4">
+        <label className="block text-sm font-medium text-gray-700">Date of Birth </label>
+        <DatePicker 
+          selected={formData.dobTh ? new Date(formData.dobTh) : null} 
+          onChange={(date) => handleDateChange("dobTh", date)} 
+          dateFormat="MM-dd-yyyy"
+          className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
+        />
+      </div>
+
+      <div className="mt-4 flex gap-4">
+        {/* Issue Date */}
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-gray-700">Issue Date</label>
+          <DatePicker 
+            selected={formData.issueDate ? new Date(formData.issueDate) : null} 
+            onChange={(date) => handleDateChange("issueDate", date)} 
+            dateFormat="MM-dd-yyyy"
+            className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
+          />
+        </div>
+
+        {/* Expire Date */}
+        <div className="w-1/2">
+          <label className="block text-sm font-medium text-gray-700">Expire Date</label>
+          <DatePicker 
+            selected={formData.expireDate ? new Date(formData.expireDate) : null} 
+            onChange={(date) => handleDateChange("expireDate", date)} 
+            dateFormat="MM-dd-yyyy"
+            className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
+          />
+        </div>
+
+      </div>
+        
+      {/* Address */}
+      <InputFieldGroup 
+        fields={[{ label: "Address", name: "address" },]} 
+        formData={formData} 
+        handleChange={handleChange} 
+      />
+      
+      {/* Province */}
+      <div className="mt-4">
+        <ProvinceDropdown value={formData.province ? formData.province : null} onChange={handleProvinceChange} />
+      </div>
+
+      {/* District */}
+      <div className="mt-4">
+        <DistrictsDropdown value={formData.district ? formData.district : null} onChange={handleDistrictChange} />
+      </div>
+
+      {/* Subdistrict */}
+      <div className="mt-4">
+        <SubdistrictsDropdown value={formData.subdistrict ? formData.subdistrict : null} onChange={handleSubDistrictChange} />
+      </div>
+
     </div>
   );
 };
+
+
+
 
 export default PersonalInfoForm;

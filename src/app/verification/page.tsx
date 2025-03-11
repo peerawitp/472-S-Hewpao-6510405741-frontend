@@ -4,44 +4,28 @@ import ProgressIndicator from "../component/ProgressIndicator";
 import ConfirmInfo from "./components/ConfirmInfo";
 import PersonalInfoForm from "./components/PersonalInfoForm";
 import UploadDocuments from "./components/UploadDocuments";
+import { IdentityVerification } from "@/interfaces/IdentityVerification";
 
-interface IdentityVerification {
-  agreeToTerms: boolean;
-  IDNumber: string;
-  firstNameTh: string;
-  lastNameTh: string;
-  firstNameEn: string;
-  lastNameEn: string;
-  dobTh: string;
-  dobEn: string;
-  address: string;
-  subDistrict: string;
-  district: string;
-  province: string;
-  postalCode: string;
-  userId: string;
-  idDocuments: File[];
-}
 
 function Page() {
   const [step, setStep] = useState(1);
-  const verificationSteps = ['Verification Started', 'Identity Checked', 'Verifying', 'Verification Complete'];
+  const verificationSteps = ['Verification Started', 'Identity Checked', 'Verifying'];
+  
   const [formData, setFormData] = useState<IdentityVerification>({
-    agreeToTerms: false,
+    userId:"",
     IDNumber: "",
     firstNameTh: "",
     lastNameTh: "",
     firstNameEn: "",
     lastNameEn: "",
-    dobTh: "",
-    dobEn: "",
+    dob: "",
     address: "",
-    subDistrict: "",
-    district: "",
     province: "",
+    district: "",
+    subdistrict: "",
     postalCode: "",
-    userId: "",
     idDocuments: [],
+    agreeToTerms: false,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -53,9 +37,28 @@ function Page() {
     setFormData((prev) => ({ ...prev, idDocuments: newImages }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep((prev) => prev + 1);
+  const handleDateChange = (name: string, date: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: date,
+    }));
+  };
+
+  const handleBackStep = () => {
+    if (step > 1) setStep((prev) => prev - 1);
+  };
+
+  const handleNextStep = () => {
+    if (step < 3) setStep((prev) => prev + 1);
+    else {
+      handleConfirm(); // เมื่อถึงขั้นสุดท้ายให้เรียกฟังก์ชันยืนยัน
+      setStep((prev) => prev + 1); // ไปหน้าอื่น
+    }
+  };
+
+  const handleConfirm = () => {
+    console.log("Final Form Data:", formData);
+    alert("Verification Complete! 🎉");
   };
 
   return (
@@ -65,12 +68,23 @@ function Page() {
 
         {step === 1 && <PersonalInfoForm formData={formData} handleChange={handleChange} />}
         {step === 2 && <UploadDocuments formData={formData} handleImagesChange={handleImagesChange} />}
-        {step === 3 && <ConfirmInfo formData={formData} handleBackStep={() => setStep(2)} handleNextStep={() => setStep(4)} />}
+        {step === 3 && <ConfirmInfo formData={formData} handleBackStep={handleBackStep} handleNextStep={handleNextStep} />}
 
         {step < 4 && (
-          <div className="flex justify-center mt-4">
-            <button onClick={() => setStep((prev) => prev + 1)} className="bg-green-500 text-white px-4 py-2 rounded-lg">
-              Next
+          <div className="flex justify-between mt-4">
+            <button 
+              onClick={handleBackStep} 
+              className={`px-4 py-2 rounded-lg ${step === 1 ? "bg-gray-300 text-gray-600 cursor-not-allowed" : "bg-gray-400 text-white"}`} 
+              disabled={step === 1}
+            >
+              Back
+            </button>
+
+            <button 
+              onClick={handleNextStep} 
+              className="bg-green-500 text-white px-4 py-2 rounded-lg"
+            >
+              {step === 3 ? "Confirm" : "Next"}
             </button>
           </div>
         )}
