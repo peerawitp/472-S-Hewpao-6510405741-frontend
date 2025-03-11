@@ -5,6 +5,7 @@ import "react-datepicker/dist/react-datepicker.css"; // นำเข้า CSS
 import ProvinceDropdown from "./Province";
 import DistrictsDropdown from "./Districts";
 import SubdistrictsDropdown from "./Subdistricts";
+import BankDropdown from "./์BankDropdown";
 
 interface PersonalInfoFormProps {
   formData: any;
@@ -53,6 +54,16 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
     handleChange(event);
   };
 
+  const handleBankChange = (bank: string | null) => {
+    const event = {
+      target: {
+        name: "bank",
+        value: bank ? bank.toString() : "",
+      },
+    } as React.ChangeEvent<HTMLInputElement>;
+    handleChange(event);
+  };
+
   const convertToBuddhistYear = (date: Date | null) => {
     if (!date) return null;
     const buddhistYear = date.getFullYear() + 543;
@@ -70,11 +81,13 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
       <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
     
       {/* ID Number */}
-      <InputFieldGroup fields={
-        [{ label: "ID Number", name: "IDNumber" }
-
-        ]
-      } formData={formData} handleChange={handleChange} />
+      <div className="mt-4 flex gap-4">
+        <InputFieldGroup fields={
+          [
+            { label: "ID Number", name: "IDNumber" }
+          ]
+        } formData={formData} handleChange={handleChange} />
+      </div>
 
       {/* Infomation TH */}
       <div className="mt-4 flex gap-4">
@@ -119,7 +132,7 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
       </div>
 
       {/* Date of Birth */}
-      <div className="mt-4">
+      <div className="mt-4 flex gap-4">
         <label className="block text-sm font-medium text-gray-700">Date of Birth </label>
         <DatePicker 
           selected={formData.dobTh ? new Date(formData.dobTh) : null} 
@@ -153,28 +166,46 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
         </div>
 
       </div>
-        
-      {/* Address */}
-      <InputFieldGroup 
-        fields={[{ label: "Address", name: "address" },]} 
-        formData={formData} 
-        handleChange={handleChange} 
-      />
-      
-      {/* Province */}
-      <div className="mt-4">
-        <ProvinceDropdown value={formData.province ? formData.province : null} onChange={handleProvinceChange} />
+
+      <hr className="mt-6 mb-6 border-t border-gray-300" />
+
+      {/* Account */}
+      <div className="mt-4 flex gap-4">
+        <InputFieldGroup 
+          fields={[{ label: "Account Name", name: "account_name" }]} 
+          formData={formData} 
+          handleChange={handleChange} 
+        />
+
+        <InputFieldGroup 
+          fields={[{ label: "Account Number", name: "account_number" }]} 
+          formData={formData} 
+          handleChange={handleChange} 
+        />
+
+        <BankDropdown value={formData.bank ? formData.bank : null} onChange={handleBankChange} />
+
+
       </div>
+
+
+      <hr className="mt-6 mb-6 border-t border-gray-300" />
+
+      {/* Address */}
+        <InputFieldGroup 
+          fields={[{ label: "Address", name: "address" },]} 
+          formData={formData} 
+          handleChange={handleChange} 
+        />
+
+      {/* Province */}
+      <ProvinceDropdown value={formData.province ? formData.province : null} onChange={handleProvinceChange} />
 
       {/* District */}
-      <div className="mt-4">
-        <DistrictsDropdown value={formData.district ? formData.district : null} onChange={handleDistrictChange} />
-      </div>
+      <DistrictsDropdown value={formData.district ? formData.district : null} onChange={handleDistrictChange} />
 
       {/* Subdistrict */}
-      <div className="mt-4">
-        <SubdistrictsDropdown value={formData.subdistrict ? formData.subdistrict : null} onChange={handleSubDistrictChange} />
-      </div>
+      <SubdistrictsDropdown value={formData.subdistrict ? formData.subdistrict : null} onChange={handleSubDistrictChange} />
 
     </div>
   );

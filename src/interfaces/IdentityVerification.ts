@@ -1,6 +1,7 @@
 
 export interface IdentityVerification {
     userId: string;
+    
     IDNumber: string;
     firstNameTh: string;
     lastNameTh: string;
@@ -12,6 +13,12 @@ export interface IdentityVerification {
     district: string;
     subdistrict: string;
     postalCode: string;
+
+    account_number: string;
+    account_name: string;
+    bank_swift: string;
+
     idDocuments: File[];
+
     agreeToTerms: boolean;
   }

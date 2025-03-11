@@ -24,6 +24,9 @@ function Page() {
     district: "",
     subdistrict: "",
     postalCode: "",
+    account_number: "",
+    account_name: "",
+    bank_swift: "",
     idDocuments: [],
     agreeToTerms: false,
   });
