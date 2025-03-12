@@ -2,20 +2,19 @@
 
 import { useState } from "react";
 
-export default function ChatInput({ currentChatId, currentUserId }: { currentChatId: number, currentUserId: number }) {
+export default function ChatInput({ currentChatId, currentUserId }: { currentChatId: number, currentUserId: string }) {
 
     const [message, setMessage] = useState('');
 
     const sendMessage = () => {
         if (message.trim() !== '') {
             const req = {
-                userID: currentUserId,
-                content: message,
-                chatID: currentChatId,
-                timestamp: new Date().toLocaleTimeString(),
+                UserID: currentUserId,
+                ChatID: currentChatId,
+                Content: message,
             };
 
-            const res = fetch("https://67cc4261dd7651e464eb73b2.mockapi.io/api/message", {
+            const res = fetch(`https://67cc4261dd7651e464eb73b2.mockapi.io/api/message`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

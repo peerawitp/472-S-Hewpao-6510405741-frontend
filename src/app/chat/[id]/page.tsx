@@ -1,21 +1,31 @@
-import ChatMessage from "../component/ChatMessage";
-import ChatInput from "../component/ChatInput";
+'use client';
+import { useParams } from "next/navigation"; 
+import ChatMessage from "../../component/ChatMessage";
+import ChatInput from "../../component/ChatInput";
 import Form from 'next/form'
 import { time } from "console";
 
-const fetchMessages = async () => {
-    const res = await fetch("https://67cc4261dd7651e464eb73b2.mockapi.io/api/message");
+const fetchMessages = async (chatId: number) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/api/message${chatId}`);
+    
+    console.log(`${process.env.NEXT_PUBLIC_API_BASEURL}/api/message${chatId}`);
+    console.log(res);
     
     const data = await res.json();
     return data;
 }
 
 export default async function ChatPage() {
+    const router = useParams();
+    const { id } = router;
 
-    const messages = await fetchMessages();
+    const currentUserId = '1';
+    const currentChatId = id;
     
-    const currentUserId = 1;
-    const currentChatId = 11;
+    console.log('currentChatId', currentChatId);
+    console.log('api url', `${process.env.NEXT_PUBLIC_API_BASEURL}/api/message/${currentChatId}`);
+
+    // const messages = await fetchMessages(currentChatId);
 
     return (
         <div className="flex flex-col items-center h-screen gap-4 max-h-screen">
