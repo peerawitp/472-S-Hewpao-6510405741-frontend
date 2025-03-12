@@ -14,7 +14,7 @@ const verifyWithKYC = async (verify: VerifyWithKYCDTO) => {
         `/verify`, 
         verify,
         {headers: {
-                Authorization: `Bearer ${session}`,
+                Authorization: `Bearer ${session?.user?.access_token}`,
             },
         }
     );
@@ -26,7 +26,7 @@ const updateUserVerification = async (email: string) => {
     const { data } = await axiosInstance.post(`/verify/set/${email}`,{
     headers: 
         {
-            Authorization: `Bearer ${session}`,
+            Authorization: `Bearer ${session?.user?.access_token}`,
         },
     });
     return data;
@@ -37,7 +37,7 @@ const getVerificationStatus = async (id: string) => {
     const { data } = await axiosInstance.get(`/verify/${id}`, {
     headers: 
         {
-            Authorization: `Bearer ${session}`,
+            Authorization: `Bearer ${session?.user?.access_token}`,
         },
     });
     return data;

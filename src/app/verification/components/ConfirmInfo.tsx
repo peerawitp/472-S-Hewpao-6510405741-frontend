@@ -21,8 +21,6 @@ const ConfirmInfo: React.FC<ConfirmInfoProps> = ({ formData, handleBackStep, han
       <p><strong>SubDistrict:</strong> {formData.subdistrict}</p>
       <p><strong>PostalCode:</strong> {formData.postalCode}</p>
       <p><strong>Uploaded Documents:</strong> {formData.idDocuments.length} file(s)</p>
-
-
     </div>
   );
 };
