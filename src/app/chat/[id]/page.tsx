@@ -1,48 +1,57 @@
 'use client';
-import { useParams } from "next/navigation"; 
+
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import ChatMessage from "../../component/ChatMessage";
 import ChatInput from "../../component/ChatInput";
-import Form from 'next/form'
-import { time } from "console";
 
-const fetchMessages = async (chatId: number) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/api/message${chatId}`);
-    
-    console.log(`${process.env.NEXT_PUBLIC_API_BASEURL}/api/message${chatId}`);
+const fetchMessages = async (chatId: string) => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/message/${chatId}`);
     console.log(res);
     
-    const data = await res.json();
-    return data;
-}
+    if (!res.ok) {
+        console.error("Failed to fetch messages");
+        return [];
+    }
+    return res.json();
+};
 
-export default async function ChatPage() {
-    const router = useParams();
-    const { id } = router;
-
+export default function ChatPage() {
+    const { id: currentChatId } = useParams();
+    const [messages, setMessages] = useState<any[]>([]);
     const currentUserId = '1';
-    const currentChatId = id;
-    
-    console.log('currentChatId', currentChatId);
-    console.log('api url', `${process.env.NEXT_PUBLIC_API_BASEURL}/api/message/${currentChatId}`);
 
-    // const messages = await fetchMessages(currentChatId);
+    useEffect(() => {
+        if (!currentChatId) return;
+
+        const loadMessages = async () => {
+            const data = await fetchMessages(currentChatId.toString());
+            console.log(data);
+            
+            setMessages(data);
+        };
+
+        loadMessages();
+    }, [currentChatId]);
 
     return (
         <div className="flex flex-col items-center h-screen gap-4 max-h-screen">
-
             <div className="flex flex-col w-full px-4">
                 <h1 className="text-3xl font-bold">Chat</h1>
                 <p className="text-gray-500">Chat ID: {currentChatId}</p>
             </div>
 
             <div className="flex flex-col gap-2 bg-gray-50 p-4 w-full h-full rounded-xl overflow-y-auto">
-                {messages.map((msg: any) => (
-                    <ChatMessage key={msg.id} message={msg} self={msg.userID === currentUserId} />
-                ))}
+                {messages.length > 0 ? (
+                    messages.map((msg) => (
+                        <ChatMessage key={msg.ID} message={msg} self={msg.UserID === currentUserId} />
+                    ))
+                ) : (
+                    <p className="text-center text-gray-400">No messages yet.</p>
+                )}
             </div>
             
-            <ChatInput currentChatId={currentChatId} currentUserId={currentUserId}/>
-
+            <ChatInput currentChatId={currentChatId as string} currentUserId={currentUserId} />
         </div>
     );
 }

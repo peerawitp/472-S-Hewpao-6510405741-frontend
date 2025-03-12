@@ -2,19 +2,23 @@
 
 import { useState } from "react";
 
-export default function ChatInput({ currentChatId, currentUserId }: { currentChatId: number, currentUserId: string }) {
+export default function ChatInput({ currentChatId, currentUserId }: { currentChatId: string, currentUserId: string }) {
 
     const [message, setMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const sendMessage = () => {
-        if (message.trim() !== '') {
-            const req = {
-                UserID: currentUserId,
-                ChatID: currentChatId,
-                Content: message,
-            };
+    const sendMessage = async () => {
+        if (!message.trim()) return; // Prevent empty messages
+        setIsLoading(true);
 
-            const res = fetch(`https://67cc4261dd7651e464eb73b2.mockapi.io/api/message`, {
+        const req = {
+            user_id: currentUserId,
+            chat_id: Number(currentChatId), // Ensure it's a number
+            content: message,
+        };
+
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/message/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -22,20 +26,23 @@ export default function ChatInput({ currentChatId, currentUserId }: { currentCha
                 body: JSON.stringify(req),
             });
 
-            console.log(req);
-            
-        }
-
-        setMessage('');
-    }
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Prevents line breaks in multi-line inputs
-            sendMessage();
+            if (!res.ok) {
+                console.error("Failed to send message", await res.text());
+            }
+        } catch (error) {
+            console.error("Error sending message:", error);
+        } finally {
+            setIsLoading(false);
+            setMessage('');
         }
     };
 
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter' && !isLoading) {
+            e.preventDefault();
+            sendMessage();
+        }
+    };
 
     return (
         <div className="w-full flex justify-center items-center gap-4 px-4">
@@ -46,6 +53,7 @@ export default function ChatInput({ currentChatId, currentUserId }: { currentCha
                 onKeyDown={handleKeyDown}
                 className="w-full rounded-xl shadow-lg px-6 py-4"
                 placeholder="พิมพ์ข้อความตรงนี้..."
+                disabled={isLoading}
             />
 
             {/* <div className="cursor-pointer">
@@ -56,9 +64,12 @@ export default function ChatInput({ currentChatId, currentUserId }: { currentCha
 
             <button 
                 onClick={sendMessage}
-                className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                Send
+                disabled={isLoading || !message.trim()}
+                className={`px-4 py-2 rounded-lg shadow-lg ${
+                    isLoading ? "bg-gray-400" : "bg-green-500 text-white"
+                }`}>
+                {isLoading ? "Sending..." : "Send"}
             </button>
         </div>
-    )
+    );
 }
