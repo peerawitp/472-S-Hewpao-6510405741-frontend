@@ -5,7 +5,7 @@ import "react-datepicker/dist/react-datepicker.css"; // นำเข้า CSS
 import ProvinceDropdown from "./Province";
 import DistrictsDropdown from "./Districts";
 import SubdistrictsDropdown from "./Subdistricts";
-import BankDropdown from "./์BankDropdown";
+import BankDropdown from "./BankDropdown";
 
 interface PersonalInfoFormProps {
   formData: any;
@@ -131,20 +131,21 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
         </div>
       </div>
 
-      {/* Date of Birth */}
-      <div className="mt-4 flex gap-4">
-        <label className="block text-sm font-medium text-gray-700">Date of Birth </label>
-        <DatePicker 
-          selected={formData.dobTh ? new Date(formData.dobTh) : null} 
-          onChange={(date) => handleDateChange("dobTh", date)} 
-          dateFormat="MM-dd-yyyy"
-          className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
-        />
-      </div>
+
 
       <div className="mt-4 flex gap-4">
+        {/* Date of Birth */}
+        <div className="w-1/3">
+          <label className="block text-sm font-medium text-gray-700">Date of Birth </label>
+          <DatePicker 
+            selected={formData.dobTh ? new Date(formData.dobTh) : null} 
+            onChange={(date) => handleDateChange("dobTh", date)} 
+            dateFormat="MM-dd-yyyy"
+            className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
+          />
+        </div>
         {/* Issue Date */}
-        <div className="w-1/2">
+        <div className="w-1/3">
           <label className="block text-sm font-medium text-gray-700">Issue Date</label>
           <DatePicker 
             selected={formData.issueDate ? new Date(formData.issueDate) : null} 
@@ -155,7 +156,7 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
         </div>
 
         {/* Expire Date */}
-        <div className="w-1/2">
+        <div className="w-1/3">
           <label className="block text-sm font-medium text-gray-700">Expire Date</label>
           <DatePicker 
             selected={formData.expireDate ? new Date(formData.expireDate) : null} 
@@ -171,19 +172,24 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
 
       {/* Account */}
       <div className="mt-4 flex gap-4">
-        <InputFieldGroup 
-          fields={[{ label: "Account Name", name: "account_name" }]} 
-          formData={formData} 
-          handleChange={handleChange} 
-        />
-
-        <InputFieldGroup 
-          fields={[{ label: "Account Number", name: "account_number" }]} 
-          formData={formData} 
-          handleChange={handleChange} 
-        />
-
-        <BankDropdown value={formData.bank ? formData.bank : null} onChange={handleBankChange} />
+        <div className="w-1/3">
+          <InputFieldGroup 
+            fields={[{ label: "Account Name", name: "account_name" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
+          />
+        </div>
+        <div className="w-1/3">
+          <InputFieldGroup 
+            fields={[{ label: "Account Number", name: "account_number" }]} 
+            formData={formData} 
+            handleChange={handleChange} 
+          />
+        </div>
+        <div className="w-1/3">
+          <BankDropdown value={formData.bank ? formData.bank : null} onChange={handleBankChange} />
+          
+        </div>
 
 
       </div>
