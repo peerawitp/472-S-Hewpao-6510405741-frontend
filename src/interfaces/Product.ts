@@ -10,6 +10,8 @@ export interface Product {
     quantity: number;
     image: string;
     status: string;
+    product_from: string;
+    product_to: string;
     deadline?: string|null;
   }
   
