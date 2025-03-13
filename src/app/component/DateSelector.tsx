@@ -39,7 +39,7 @@ export default function DateSelector({
   const [returnDate, setReturnDate] = useState<Date | null>(initialReturnDate);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const datePickerRef = useRef<any>(null);
+  const datePickerRef = useRef<HTMLDivElement | null>(null);
 
   // API hook
   const createOffer = useCreateOffer();
@@ -236,7 +236,8 @@ export default function DateSelector({
               className="border p-2 pl-9 w-full rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholderText="Select return date"
               dayClassName={(date) => {
-                // Highlight current date selection
+                if (!date) return "";
+
                 const isSelected =
                   returnDate &&
                   date.getDate() === returnDate.getDate() &&
@@ -245,12 +246,12 @@ export default function DateSelector({
 
                 if (isSelected) return "bg-blue-500 text-white rounded-full";
                 if (isWeekend(date)) return "bg-blue-50 rounded-full";
-                return undefined;
+
+                return "";
               }}
               popperClassName="z-50"
               onCalendarOpen={() => {
                 setIsCalendarOpen(true);
-                // Force update of input value when calendar opens
                 if (returnDate) {
                   const formattedDate = formatDate(returnDate);
                   const inputElement = document.querySelector(
