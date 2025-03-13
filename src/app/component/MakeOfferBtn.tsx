@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DateSelector from "./DateSelector";
+import ReturnDateSelector from "./DateSelector";
 
 const MakeOfferButton = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -29,7 +29,7 @@ const MakeOfferButton = () => {
           <div className="bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-screen overflow-y-auto">
             <div className="flex justify-between items-center border-b p-4">
               <h2 className="text-xl font-semibold">Select Travel Dates</h2>
-              <button 
+              <button
                 onClick={closePopup}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -38,9 +38,9 @@ const MakeOfferButton = () => {
                 </svg>
               </button>
             </div>
-            
+
             <div className="p-4">
-              <DateSelector onClose={closePopup} />
+              <ReturnDateSelector/>
             </div>
           </div>
         </div>
