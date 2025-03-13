@@ -17,7 +17,7 @@ export default function ProgressIndicator({
             <div
               className={`w-8 h-8 flex items-center justify-center rounded-full border-2 font-semibold ${
                 step >= stepId
-                  ? "bg-blue-500 text-white border-blue-500"
+                  ? "bg-primary text-white border-primary"
                   : "bg-gray-200 text-gray-600 border-gray-400"
               }`}
             >
@@ -27,7 +27,7 @@ export default function ProgressIndicator({
             {/* Step Label */}
             <span
               className={`ml-2 font-medium ${
-                step >= stepId ? "text-blue-600" : "text-gray-500"
+                step >= stepId ? "text-dark-primary" : "text-gray-500"
               }`}
             >
               {label}
@@ -37,7 +37,7 @@ export default function ProgressIndicator({
             {index < steps.length - 1 && (
               <div
                 className={`w-12 h-1 mx-2 ${
-                  step > stepId ? "bg-blue-500" : "bg-gray-300"
+                  step > stepId ? "bg-primary" : "bg-gray-300"
                 }`}
               ></div>
             )}
