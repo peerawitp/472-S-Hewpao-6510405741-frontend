@@ -35,8 +35,8 @@ const Navbar = () => {
   return (
     <>
       <nav className="grid grid-cols-3 px-6 py-4 bg-white shadow-sm items-center">
-        <Link href="/">
-          <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
+        <Link href="/" className="w-fit">
+          <div className="text-primary text-xl font-bold hover:text-secondary ease-in-out duration-300">HewPao</div>
         </Link>
         <div className="flex justify-center gap-20">
           <div>
@@ -99,7 +99,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 hover:bg-gray-600 text-sm h-10 px-4 cursor-pointer text-[#FFFFFF] font-medium"
+              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 hover:bg-gray-600 text-sm h-10 px-4 cursor-pointer text-white font-medium"
             >
               Sign In
             </button>
