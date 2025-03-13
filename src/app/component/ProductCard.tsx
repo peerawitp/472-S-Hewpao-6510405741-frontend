@@ -29,21 +29,21 @@ function ProductCard() {
           {/* Product Info */}
           <h2 className="mt-4 font-semibold text-gray-800">{product.name}</h2>
 
-                    <div className="mt-auto">
-                        <div className="mt-2 text-sm">
-                            <div className="flex items-center text-gray-600">
-                                <span className="font-medium">From:</span>
-                                <span className="ml-2">{product.product_from}</span>
-                            </div>
-                            <div className="flex items-center text-gray-600 mt-1 mb-2">
-                                <span className="font-medium">To:</span>
-                                <span className="ml-2">{product.product_to}</span>
-                            </div>
-                        </div>
-                        <p className="text-gray-600 mb-2">
-                            Retailer price:{" "}
-                            <span className="font-bold text-gray-900">{product.budget}</span>
-                        </p>
+          <div className="mt-auto">
+            <div className="mt-2 text-sm">
+              <div className="flex items-center text-gray-600">
+                <span className="font-medium">From:</span>
+                <span className="ml-2">{product.product_from}</span>
+              </div>
+              <div className="flex items-center text-gray-600 mt-1 mb-2">
+                <span className="font-medium">To:</span>
+                <span className="ml-2">{product.product_to}</span>
+              </div>
+            </div>
+            <p className="text-gray-600 mb-2">
+              Retailer price:{" "}
+              <span className="font-bold text-gray-900">{product.price}</span>
+            </p>
 
             {isTravelerPage && (
               <div className="mt-3">
