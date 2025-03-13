@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import MakeOfferButton from "./MakeOfferBtn";
 import { useGetPaginatedProductRequests } from "@/api/productRequest/useProductRequest";
+import { MakeOfferButton } from "./MakeOfferBtn";
 
 function ProductCard() {
   const pathname = usePathname();
@@ -15,7 +15,6 @@ function ProductCard() {
   if (loadingProds2) {
     return <div>..Loading</div>;
   }
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       {prods2!.data.map((product) => (
@@ -54,7 +53,7 @@ function ProductCard() {
 
             {isTravelerPage && (
               <div className="mt-3">
-                <MakeOfferButton productRequestID={product.id} />
+                <MakeOfferButton productRequestID={Number(product.id)} />
               </div>
             )}
           </div>
