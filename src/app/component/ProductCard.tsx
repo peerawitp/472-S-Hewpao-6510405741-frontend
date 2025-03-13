@@ -34,16 +34,16 @@ function ProductCard() {
                         <div className="mt-2 text-sm">
                             <div className="flex items-center text-gray-600">
                                 <span className="font-medium">From:</span>
-                                <span className="ml-2">{product.product_from}</span>
+                                <span className="ml-2 font-bold">{product.product_from}</span>
                             </div>
                             <div className="flex items-center text-gray-600 mt-1 mb-2">
                                 <span className="font-medium">To:</span>
-                                <span className="ml-2">{product.product_to}</span>
+                                <span className="ml-2 font-bold">{product.product_to}</span>
                             </div>
                         </div>
                         <p className="text-gray-600 mb-2">
                             Retailer price:{" "}
-                            <span className="font-bold text-gray-900">{product.price}</span>
+                            <span className="font-bold text-primary">{product.price}</span>
                         </p>
 
                         {isTravelerPage && (
