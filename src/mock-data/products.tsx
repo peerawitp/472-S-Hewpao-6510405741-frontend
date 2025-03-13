@@ -13,6 +13,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[0],
     status: "Orders", // เพิ่ม status
+    product_from: "California, United States",
+    product_to: "Bangkok, Thailand",
   },
   {
     id: "2",
@@ -25,6 +27,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[2],
     status: "Offers", // เพิ่ม status
+    product_from: "New York, United States",
+    product_to: "Tokyo, Japan",
   },
   {
     id: "3",
@@ -37,6 +41,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[2],
     status: "Deliver", // เพิ่ม status
+    product_from: "Singapore City, Singapore",
+    product_to: "Chiang Mai, Thailand",
   },
   {
     id: "4",
@@ -49,6 +55,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[3],
     status: "Deliver", // เพิ่ม status
+    product_from: "Munich, Germany",
+    product_to: "Phuket, Thailand",
   },
   {
     id: "5",
@@ -61,6 +69,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[4],
     status: "Orders", // เพิ่ม status
+    product_from: "Mexico City, Mexico",
+    product_to: "Pattaya, Thailand",
   },
   {
     id: "6",
@@ -73,6 +83,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: undefined,
     status: "Offers", // เพิ่ม status
+    product_from: "London, United Kingdom",
+    product_to: "Krabi, Thailand",
   },
   {
     id: "7",
@@ -85,6 +97,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: undefined,
     status: "Deliver", // เพิ่ม status
+    product_from: "Taipei, Taiwan",
+    product_to: "Chiang Rai, Thailand",
   },
   {
     id: "8",
@@ -97,6 +111,8 @@ export const products: Product[] = [
     deadline: new Date().toISOString(),
     traveler: mockUsers[0],
     status: "Delivered", // เพิ่ม status
+    product_from: "Toronto, Canada",
+    product_to: "Hua Hin, Thailand",
   },
   {
     traveler: mockUsers[0],
@@ -109,6 +125,8 @@ export const products: Product[] = [
     image: "/images/airpods-max.png",
     deadline: "2024-12-31",
     status: "Deliver",
+    product_from: "Bangkok, Thailand",
+    product_to: "Kyoto, Japan",
   },
   {
     traveler: mockUsers[0],
@@ -121,5 +139,7 @@ export const products: Product[] = [
     image: "/images/airpods-max.png",
     deadline: "2024-10-15",
     status: "Offers", // เพิ่ม status
+    product_from: "Chiang Mai, Thailand",
+    product_to: "Kathmandu, Nepal",
   },
 ];
