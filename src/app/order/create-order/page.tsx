@@ -101,7 +101,7 @@ function CreateOrderPage() {
                   name="title"
                   value={orderData.title}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                 />
               </div>
@@ -114,7 +114,7 @@ function CreateOrderPage() {
                   name="category"
                   value={orderData.category}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                 >
                   <option value="">Select a category</option>
@@ -135,7 +135,7 @@ function CreateOrderPage() {
                   value={orderData.description}
                   onChange={handleChange}
                   rows={4}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                   placeholder="Enter product details like model, size, color, etc."
                 />
@@ -162,7 +162,7 @@ function CreateOrderPage() {
                   onChange={handleChange}
                   min="0"
                   step="100"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                   placeholder="Enter your budget"
                 />
@@ -191,7 +191,7 @@ function CreateOrderPage() {
                   value={orderData.quantity}
                   onChange={handleChange}
                   min="1"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
                   placeholder="Enter quantity"
                 />
@@ -212,14 +212,14 @@ function CreateOrderPage() {
                   name="verifyProductService"
                   checked={orderData.verifyProductService}
                   onChange={handleChange}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="h-4 w-4 text-dark-primary  border-gray-300 rounded focus:ring-primary accent-primary"
                 />
 
                 <label
                   htmlFor="verifyProductService"
                   className="ml-2 text-sm text-gray-700"
                 >
-                  200 THB for Verify Product Service (Optional)
+                  200 THB for Verify Product Service <span className="text-[#696969]">(Optional)</span>
                 </label>
               </div>
             </>
@@ -237,7 +237,7 @@ function CreateOrderPage() {
                   name="deliveryFrom"
                   value={orderData.deliveryFrom}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
                   required
                 />
               </div>
@@ -251,7 +251,7 @@ function CreateOrderPage() {
                   name="deliveryTo"
                   value={orderData.deliveryTo}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
                   required
                 />
               </div>
@@ -264,7 +264,7 @@ function CreateOrderPage() {
                   name="deliveryTime"
                   value={orderData.deliveryTime}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
                   required
                 >
                   <option value="">Select a delivery time</option>
@@ -302,18 +302,45 @@ function CreateOrderPage() {
                   ))}
                 </div>
               </div>
-              <p>
-                <strong>Product:</strong> {orderData.title} <br />
-                <strong>Category:</strong> {orderData.category} <br />
-                <strong>Description:</strong> {orderData.description} <br />
-                <strong>Budget:</strong> {orderData.budget} THB <br />
-                <strong>Quantity:</strong> {orderData.quantity} <br />
-                <strong>Verify Product Service:</strong>{" "}
-                {orderData.verifyProductService ? "Yes" : "No"} <br />
-                <strong>Delivery Time:</strong> {orderData.deliveryTime} <br />
-                <strong>Deliver from:</strong> {orderData.deliveryFrom} <br />
-                <strong>Deliver to:</strong> {orderData.deliveryTo} <br />
-              </p>
+              <div>
+                <div className="justify-between flex w-full">
+                  <div>Product:</div> 
+                  <div>{orderData.title}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Category:</div> 
+                  <div>{orderData.category}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Description:</div> 
+                  <div>{orderData.description}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Budget:</div> 
+                  <div>{orderData.budget} THB</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Quantity:</div> 
+                  <div>{orderData.quantity}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Verify Product Service: </div> 
+                  <div>{orderData.verifyProductService ? "Yes" : "No"}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Delivery Time:</div> 
+                  <div>{orderData.deliveryTime}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Deliver from:</div> 
+                  <div>{orderData.deliveryFrom}</div> 
+                </div>
+                <div className="justify-between flex w-full">
+                  <div>Deliver to:</div> 
+                  <div>{orderData.deliveryTo}</div> 
+                </div>   
+               
+              </div>
             </>
           )}
 
@@ -323,7 +350,7 @@ function CreateOrderPage() {
               <button
                 type="button"
                 onClick={handlePrevious}
-                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
+                className="bg-gray-300 text-gray-800 px-4 py-2 font-bold rounded-lg hover:bg-gray-400 duration-300"
               >
                 Previous
               </button>
@@ -332,14 +359,14 @@ function CreateOrderPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                className="bg-primary text-white px-4 py-2 font-bold rounded-lg hover:bg-dark-primary ease-in-out duration-300"
               >
                 Next
               </button>
             ) : (
               <button
                 type="submit"
-                className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                className="bg-[#FFF2AF] text-black font-bold px-4 py-2 rounded-lg hover:bg-[#fbe784] duration-300"
               >
                 Submit Order
               </button>
