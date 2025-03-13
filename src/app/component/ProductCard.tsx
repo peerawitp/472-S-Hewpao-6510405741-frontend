@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useGetPaginatedProductRequests } from "@/api/productRequest/useProductRequest";
-import { MakeOfferButton } from "./MakeOfferBtn";
+import MakeOfferButton from "./MakeOfferBtn";
 
 function ProductCard() {
   const pathname = usePathname();

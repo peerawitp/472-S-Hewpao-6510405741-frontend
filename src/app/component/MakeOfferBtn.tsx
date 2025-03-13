@@ -7,7 +7,7 @@ interface MakeOfferButtonProps {
   productRequestID: number;
 }
 
-export const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
+const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
   const [showPopup, setShowPopup] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -159,3 +159,5 @@ export const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
     </div>
   );
 };
+
+export default MakeOfferButton;
