@@ -43,7 +43,7 @@ function ProductCard() {
                         </div>
                         <p className="text-gray-600 mb-2">
                             Retailer price:{" "}
-                            <span className="font-bold text-primary">{product.price}</span>
+                            <span className="font-bold text-primary">{product.budget}</span>
                         </p>
 
                         {isTravelerPage && (

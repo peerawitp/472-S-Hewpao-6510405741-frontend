@@ -2,39 +2,42 @@
 import { useState, useCallback } from "react";
 import ProgressIndicator from "../../component/ProgressIndicator";
 import ImageUpload from "../../component/ImageUpload";
+import { useCreateProductRequest } from "@/api/productRequest/useProductRequest";
+import { useRouter } from "next/navigation";
 
 interface OrderRequest {
-  title: string;
-  description: string;
+  name: string;
+  desc: string;
   images: File[];
   budget: number;
-  category: string;
   quantity: number;
-  verifyProductService: boolean;
-  deliveryFrom: string;
-  deliveryTo: string;
-  deliveryTime: string;
+  category: string;
+  check_service: boolean;
+  from: string;
+  to: string;
 }
 
 function CreateOrderPage() {
   const [step, setStep] = useState(1);
-  const customSteps = ['Product details', 'Delivery details', 'Summary'];
+  const customSteps = ["Product details", "Delivery details", "Summary"];
 
+  const createProductRequest = useCreateProductRequest();
 
   const [orderData, setOrderData] = useState<OrderRequest>({
-    title: "",
-    description: "",
+    name: "",
+    desc: "",
     images: [],
     budget: 0,
     category: "",
     quantity: 1,
-    verifyProductService: false,
-    deliveryFrom: "",
-    deliveryTo: "",
-    deliveryTime: "Up to 1 month",
+    check_service: false,
+    from: "",
+    to: "",
   });
 
-  const categories = ["Sneaker", "Hat", "Shirt", "Suit", "Pant", "Other"];
+  const router = useRouter();
+
+  const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
 
   const handleNext = () => {
     if (step < customSteps.length) setStep(step + 1);
@@ -44,10 +47,20 @@ function CreateOrderPage() {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     // Add API call to submit order here
     console.log("Submitting order:", orderData);
+
+    await createProductRequest.mutateAsync(orderData, {
+      onSuccess: () => {
+        alert("Order submitted successfully!");
+      },
+      onError: (error) => {
+        alert(error.message);
+      },
+    });
+    // TODO: Change this to redirect to list of my product request page or something
+    router.push("/");
   };
 
   const handleChange = (
@@ -55,7 +68,10 @@ function CreateOrderPage() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
   ) => {
-    const { name, type, value, checked } = e.target;
+    const { name, type } = e.target;
+    const value = e.target.value;
+    const checked =
+      type === "checkbox" ? (e.target as HTMLInputElement).checked : false;
     setOrderData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -88,7 +104,7 @@ function CreateOrderPage() {
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form className="space-y-6">
           {/* ✅ Step 1: Product Details */}
           {step === 1 && (
             <>
@@ -98,8 +114,8 @@ function CreateOrderPage() {
                 </label>
                 <input
                   type="text"
-                  name="title"
-                  value={orderData.title}
+                  name="name"
+                  value={orderData.name}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   required
@@ -131,8 +147,9 @@ function CreateOrderPage() {
                   Product details
                 </label>
                 <textarea
-                  name="description"
-                  value={orderData.description}
+                  id="desc"
+                  name="desc"
+                  value={orderData.desc}
                   onChange={handleChange}
                   rows={4}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -208,9 +225,9 @@ function CreateOrderPage() {
               <div className="flex items-center">
                 <input
                   type="checkbox"
-                  id="verifyProductService"
-                  name="verifyProductService"
-                  checked={orderData.verifyProductService}
+                  id="check_service"
+                  name="check_service"
+                  checked={orderData.check_service}
                   onChange={handleChange}
                   className="h-4 w-4 text-dark-primary  border-gray-300 rounded focus:ring-primary accent-primary"
                 />
@@ -234,8 +251,8 @@ function CreateOrderPage() {
                 </label>
                 <input
                   type="text"
-                  name="deliveryFrom"
-                  value={orderData.deliveryFrom}
+                  name="from"
+                  value={orderData.from}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
                   required
@@ -248,31 +265,12 @@ function CreateOrderPage() {
                 </label>
                 <input
                   type="text"
-                  name="deliveryTo"
-                  value={orderData.deliveryTo}
+                  name="to"
+                  value={orderData.to}
                   onChange={handleChange}
                   className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
                   required
                 />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Delivery time
-                </label>
-                <select
-                  name="deliveryTime"
-                  value={orderData.deliveryTime}
-                  onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-primary outline-none focus:ring-1 focus:ring-primary"
-                  required
-                >
-                  <option value="">Select a delivery time</option>
-                  <option value="Up to 1 week">Up to 1 week</option>
-                  <option value="Up to 2 weeks">Up to 2 weeks</option>
-                  <option value="Up to 1 month">Up to 1 month</option>
-                  <option value="More than 1 month">More than 1 month</option>
-                </select>
               </div>
             </>
           )}
@@ -304,42 +302,38 @@ function CreateOrderPage() {
               </div>
               <div>
                 <div className="justify-between flex w-full">
-                  <div>Product:</div> 
-                  <div>{orderData.title}</div> 
+                  <div>Product:</div>
+                  <div>{orderData.name}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Category:</div> 
-                  <div>{orderData.category}</div> 
+                  <div>Category:</div>
+                  <div>{orderData.category}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Description:</div> 
-                  <div>{orderData.description}</div> 
+                  <div>Description:</div>
+                  <div>{orderData.desc}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Budget:</div> 
-                  <div>{orderData.budget} THB</div> 
+                  <div>Budget:</div>
+                  <div>{orderData.budget} THB</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Quantity:</div> 
-                  <div>{orderData.quantity}</div> 
+                  <div>Quantity:</div>
+                  <div>{orderData.quantity}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Verify Product Service: </div> 
-                  <div>{orderData.verifyProductService ? "Yes" : "No"}</div> 
+                  <div>Verify Product Service: </div>
+                  <div>{orderData.check_service ? "Yes" : "No"}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Delivery Time:</div> 
-                  <div>{orderData.deliveryTime}</div> 
+                  <div>Deliver from:</div>
+                  <div>{orderData.from}</div>
                 </div>
                 <div className="justify-between flex w-full">
-                  <div>Deliver from:</div> 
-                  <div>{orderData.deliveryFrom}</div> 
+                  <div>Deliver to:</div>
+                  <div>{orderData.to}</div>
                 </div>
-                <div className="justify-between flex w-full">
-                  <div>Deliver to:</div> 
-                  <div>{orderData.deliveryTo}</div> 
-                </div>   
-               
+
               </div>
             </>
           )}
@@ -365,7 +359,7 @@ function CreateOrderPage() {
               </button>
             ) : (
               <button
-                type="submit"
+                  onClick={handleSubmit}
                 className="bg-[#FFF2AF] text-black font-bold px-4 py-2 rounded-lg hover:bg-[#fbe784] duration-300"
               >
                 Submit Order
