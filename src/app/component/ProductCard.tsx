@@ -1,5 +1,4 @@
 "use client";
-import { products } from "@/mock-data/products";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import MakeOfferButton from "./MakeOfferBtn";
