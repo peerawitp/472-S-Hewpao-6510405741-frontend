@@ -2,7 +2,7 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   useGetProductRequestByID,
   useUpdateProductRequest,
@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
+import { useCheckout } from "@/api/checkout/useCheckout";
 
 function Page() {
   const router = useParams();
@@ -22,6 +23,8 @@ function Page() {
   );
   const useUpdateProduct = useUpdateProductRequest(Number(id));
   const useCancelProduct = useCancelProductRequest(Number(id));
+  const useCheckoutHook = useCheckout();
+  const routerNavigation = useRouter();
 
   const offerList: number[] =
     product?.["product-request"].offers?.map(
@@ -93,6 +96,23 @@ function Page() {
     setEditedDesc(product!["product-request"]?.desc);
     setEditedCategory(product!["product-request"]?.category);
     setEditedQuantity(product!["product-request"]?.quantity);
+  };
+
+  const handleCheckoutStripe = () => {
+    useCheckoutHook.mutate(
+      {
+        product_request_id: product?.["product-request"]?.id as number,
+        payment_gateway: "stripe",
+      },
+      {
+        onSuccess: (data) => {
+          routerNavigation.push(data.payment.payment_url);
+        },
+        onError: (err) => {
+          alert(err);
+        },
+      },
+    );
   };
 
   return (
@@ -284,6 +304,17 @@ function Page() {
 
               <div className="mt-8"></div>
 
+              {product?.["product-request"].selected_offer_id !== null &&
+                product?.["product-request"].delivery_status ===
+                  DeliveryStatus.Opening && (
+                  <button
+                    onClick={handleCheckoutStripe}
+                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+                  >
+                    💸 Checkout (Stripe)
+                  </button>
+                )}
+
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <button
                   onClick={handleCancelOrder}
@@ -313,14 +344,19 @@ function Page() {
           )}
         </div>
 
-        <h3 className="font-bold uppercase text-lg tracking-wider my-4">
-          Choose offer
-        </h3>
-        <div className="flex flex-col gap-3">
-          {offerList.map((offerId) => (
-            <OfferDetails key={offerId} id={offerId} />
-          ))}
-        </div>
+        {product?.["product-request"].delivery_status ===
+          DeliveryStatus.Opening && (
+          <>
+            <h3 className="font-bold uppercase text-lg tracking-wider my-4">
+              Choose offer
+            </h3>
+            <div className="flex flex-col gap-3">
+              {offerList.map((offerId) => (
+                <OfferDetails key={offerId} id={offerId} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

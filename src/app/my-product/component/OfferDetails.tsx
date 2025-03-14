@@ -32,6 +32,7 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ id }) => {
       {
         onSuccess: () => {
           alert("success");
+          window.location.reload();
         },
       },
     );
