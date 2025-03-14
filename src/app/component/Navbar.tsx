@@ -39,35 +39,64 @@ const Navbar = () => {
           <div className="text-primary text-xl font-bold hover:text-dark-primary ease-in-out duration-300">HewPao</div>
         </Link>
         <div className="flex justify-center gap-20">
+            <div>
+                {session.data && session.data.user ? (
+                    <Link
+                        href="/order"
+                        className={`relative font-bold ease-in-out duration-300 ${
+                            pathname === "/order" ? "text-primary" : "text-gray-500"
+                        } hover:text-primary after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:transition-transform after:duration-200 ${
+                            pathname === "/order" ? "after:scale-x-100" : "after:scale-x-0"
+                        } hover:after:scale-x-100 focus:after:scale-x-100`}
+                    >
+                        Order
+                    </Link>
+                ) : (
+                    <Link
+                        href="/signup"
+                        className="font-bold text-gray-500 hover:text-blue-500"
+                    >
+                        Order
+                    </Link>
+                )}
+            </div>
           <div>
-            <Link
-              href="/order"
-              className={`relative font-bold ease-in-out duration-300 ${
-                pathname === "/order" ? "text-primary" : "text-gray-500"
-              } hover:text-primary after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:transition-transform after:duration-200 ${
-                pathname === "/order" ? "after:scale-x-100" : "after:scale-x-0"
-              } hover:after:scale-x-100 focus:after:scale-x-100`}
-            >
-              Order
-            </Link>
-          </div>
-          <div>
-            <Link
-              href="/product-requests"
-              className={`relative font-bold ease-in-out duration-300 ${
-                pathname === "/product-requests"
-                  ? "text-primary"
-                  : "text-gray-500"
-              } hover:text-primary after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:transition-transform after:duration-200 ${
-                pathname === "/product-requests"
-                  ? "after:scale-x-100"
-                  : "after:scale-x-0"
-              } hover:after:scale-x-100 focus:after:scale-x-100`}
-            >
-              Travel
-            </Link>
+            {session.data && session.data.user ? (
+              session.data.user.is_verified ? (
+                <Link
+                    href="/product-requests"
+                    className={`relative font-bold ease-in-out duration-300 ${
+                        pathname === "/product-requests"
+                            ? "text-primary"
+                            : "text-gray-500"
+                    } hover:text-primary after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:transition-transform after:duration-200 ${
+                        pathname === "/product-requests"
+                            ? "after:scale-x-100"
+                            : "after:scale-x-0"
+                    } hover:after:scale-x-100 focus:after:scale-x-100`}
+                >
+                  Travel
+                </Link>
+              ) : (
+                <Link
+                  href="/verification"
+                  className="font-bold text-gray-500 hover:text-blue-500"
+                >
+                  Travel
+                </Link>
+              )
+            ) : (
+              <Link
+                href="/signup"
+                className="font-bold text-gray-500 hover:text-blue-500"
+              >
+                Travel
+              </Link>
+            )}
+
           </div>
         </div>
+
         <div className="flex justify-end">
           {session.data && session.data.user ? (
             <UserDropdown email={session.data.user.email || ""} />

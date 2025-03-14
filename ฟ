@@ -30,6 +30,8 @@ function ProductCard() {
 
   // Update allProducts when new data is fetched
   useEffect(() => {
+    console.log("hellowowrld");
+    console.log(allProducts.length);
     productFetch();
 
     // If we're already loading more, don't process this update
@@ -105,7 +107,7 @@ function ProductCard() {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+          <div className="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
           <p className="mt-2 text-gray-600">Loading products...</p>
         </div>
       </div>
@@ -117,8 +119,10 @@ function ProductCard() {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
         <div className="text-center">
-          <p className="text-lg text-gray-700 font-bold">No product requests found</p>
-          <p className="text-gray-500 mt-2">Check back later for new products</p>
+          <p className="text-lg text-gray-700">No product requests found</p>
+          <p className="text-gray-500 mt-2">
+            Check back later for new products
+          </p>
         </div>
       </div>
     );
@@ -176,8 +180,10 @@ function ProductCard() {
                 </div>
                 <p className="text-gray-600 mb-2">
                   Retailer price:{" "}
-                  <span className="font-bold text-primary">
-                    {typeof product.budget === 'number' ? `${product.budget} THB` : "Price not set"}
+                  <span className="font-bold text-gray-900">
+                    {typeof product.budget === "number"
+                      ? `${product.budget} THB`
+                      : "Price not set"}
                   </span>
                 </p>
 
@@ -199,9 +205,9 @@ function ProductCard() {
             onClick={handleManualLoad}
             disabled={isLoadingMore}
             className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-              isLoadingMore 
-                ? "bg-gray-400 text-white cursor-not-allowed" 
-                : "bg-primary text-white hover:bg-dark-primary"
+              isLoadingMore
+                ? "bg-gray-400 text-white cursor-not-allowed"
+                : "bg-blue-500 text-white hover:bg-blue-600"
             }`}
           >
             {isLoadingMore ? (
@@ -217,8 +223,10 @@ function ProductCard() {
       ) : (
         allProducts.length > 0 && (
           <div className="text-center bg-gray-50 px-6 py-4 rounded-lg">
-            <p className="text-gray-500">You&#39;ve seen all products</p>
-            <p className="text-gray-400 text-sm mt-1">No more items to display</p>
+            <p className="text-gray-500">You've seen all products</p>
+            <p className="text-gray-400 text-sm mt-1">
+              No more items to display
+            </p>
           </div>
         )
       )}

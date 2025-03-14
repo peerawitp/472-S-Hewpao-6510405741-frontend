@@ -1,116 +1,142 @@
 // pages/edit-product/[id].tsx
 "use client";
-import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
-import { useGetProductRequestByID, useUpdateProductRequest } from '@/api/productRequest/useProductRequest';
-import Link from 'next/link'
-import { ResponseOffer } from '@/dtos/Offer';
-import OfferDetails from '../component/OfferDetails';
+import React, { useState } from "react";
+import { useParams } from "next/navigation";
+import {
+  useGetProductRequestByID,
+  useUpdateProductRequest,
+  useCancelProductRequest,
+} from "@/api/productRequest/useProductRequest";
+import Link from "next/link";
+import { ResponseOffer } from "@/dtos/Offer";
+import OfferDetails from "../component/OfferDetails";
+import { DeliveryStatus } from "@/interfaces/ProductRequest";
 
-function Page(){
-    const router = useParams();
-    const { id } = router;
+function Page() {
+  const router = useParams();
+  const { id } = router;
 
-    const { data: product, isLoading: loading } = useGetProductRequestByID(Number(id));
-    const useUpdateProduct = useUpdateProductRequest(Number(id));
-    
-    const offerList: number[] = product?.['product-request'].offers?.map((offer: ResponseOffer) => offer.ID) || [];
+  const { data: product, isLoading: loading } = useGetProductRequestByID(
+    Number(id),
+  );
+  const useUpdateProduct = useUpdateProductRequest(Number(id));
+  const useCancelProduct = useCancelProductRequest(Number(id));
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedName, setEditedName] = useState("");
-    const [editedDesc, setEditedDesc] = useState("");
-    const [editedCategory, setEditedCategory] = useState("");
-    const [editedQuantity, setEditedQuantity] = useState(0);
+  const offerList: number[] =
+    product?.["product-request"].offers?.map(
+      (offer: ResponseOffer) => offer.ID,
+    ) || [];
 
-    const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedName, setEditedName] = useState("");
+  const [editedDesc, setEditedDesc] = useState("");
+  const [editedCategory, setEditedCategory] = useState("");
+  const [editedQuantity, setEditedQuantity] = useState(0);
 
-    React.useEffect(() => {
-            if(product?.['product-request']){
-                setEditedName(product?.['product-request']?.name);
-                setEditedDesc(product?.['product-request']?.desc);
-                setEditedCategory(product?.['product-request']?.category);
-                setEditedQuantity(product?.['product-request']?.quantity);
-            }
-    },[product])
+  const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-[300px]">
-                <div className="animate-pulse flex flex-col items-center">
-                    <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
-                    <p className="mt-2 text-gray-600">Loading products...</p>
-                </div>
-            </div>
-        );
+  React.useEffect(() => {
+    if (product?.["product-request"]) {
+      setEditedName(product?.["product-request"]?.name);
+      setEditedDesc(product?.["product-request"]?.desc);
+      setEditedCategory(product?.["product-request"]?.category);
+      setEditedQuantity(product?.["product-request"]?.quantity);
     }
+  }, [product]);
 
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
-      
-    const handleSaveClick = () => {
-        useUpdateProduct.mutate({
-            name: editedName,
-            desc: editedDesc,
-            quantity: editedQuantity,
-            category: editedCategory,
-            selected_offer_id: 0
-        }, {
+  if (loading) {
+    return <div>..Loading</div>;
+  }
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = () => {
+    useUpdateProduct.mutate(
+      {
+        name: editedName,
+        desc: editedDesc,
+        quantity: editedQuantity,
+        category: editedCategory,
+        selected_offer_id: 0,
+      },
+      {
         onSuccess: () => {
-            setIsEditing(false);
+          setIsEditing(false);
         },
-        });
-    };
+      },
+    );
+  };
 
-    const handleCancelClick = () => {
-        setIsEditing(false);
-        setEditedName(product?.['product-request']?.name);
-        setEditedDesc(product?.['product-request']?.desc);
-        setEditedCategory(product?.['product-request']?.category);
-        setEditedQuantity(product?.['product-request']?.quantity);
-      };
+  const handleCancelOrder = () => {
+    console.log("cancel clicked");
+    useCancelProduct.mutate(
+      {
+        delivery_status: DeliveryStatus.Cancel,
+        notify_provider: "email",
+      },
+      {
+        onSuccess: () => {
+          alert("Product request has been cancelled!");
+        },
+        onError: (err) => {
+          alert(err);
+        },
+      },
+    );
+  };
 
-    return <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
-	    <div className="bg-white rounded-lg shadow-md pt-8 p-6 w-full md:w-1/2">
-            <Link             
-                href={`/my-product`}
-                passHref
-                className="bg-gray-300 px-3 py-2 rounded-lg"
-            >
-                Back
-            </Link>
-	        <div className="flex pt-5 justify-between items-center">
-                <div>
-                    <h1 className="text-dark-primary font-medium">Product details</h1>
-                    <div className="flex items-center mb-4">
-                        <h2 className="text-2xl font-bold text-primary">{product?.['product-request']?.delivery_status}</h2>
-                    </div>
-                </div>
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    setEditedName(product!["product-request"]?.name);
+    setEditedDesc(product!["product-request"]?.desc);
+    setEditedCategory(product!["product-request"]?.category);
+    setEditedQuantity(product!["product-request"]?.quantity);
+  };
 
-                <div className="flex mb-5">
-                    <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
-                        <img
-                            src={product?.['product-request']?.images[0]}
-                            alt={product?.['product-request']?.name}
-                            className="w-full h-full object-cover hover:scale-105 transition-transform"
-                        />
-                    </div>
-                </div>
-            </div>
-	        <div>
-            {isEditing ? (
+  return (
+      <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
+          <div className="bg-white rounded-lg shadow-md pt-8 p-6 w-full md:w-1/2">
+              <Link
+                  href={`/my-product`}
+                  passHref
+                  className="bg-gray-300 px-3 py-2 rounded-lg"
+              >
+                  Back
+              </Link>
+              <div className="flex pt-5 justify-between items-center">
+                  <div>
+                      <h1 className="text-dark-primary font-medium">Product details</h1>
+                      <div className="flex items-center mb-4">
+                          <h2 className="text-2xl font-bold text-primary">{product?.['product-request']?.delivery_status}</h2>
+                      </div>
+                  </div>
+
+                  <div className="flex mb-5">
+                      <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
+                          <img
+                              src={product?.['product-request']?.images[0]}
+                              alt={product?.['product-request']?.name}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform"
+                          />
+                      </div>
+                  </div>
+              </div>
+        <div>
+          {isEditing ? (
             <div>
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
-                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center">
-                    <div className="text-gray-500">Name</div>
-                    <input
-                        type="text"
-                        value={editedName}
-                        onChange={(e) => setEditedName(e.target.value)}
-                        className="border p-2 w-full rounded-lg"
-                        placeholder="Name"
-                    />
-                  <div className="text-gray-500 self-start">Description</div>
+                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
+                  <div className="text-gray-500">Name</div>
+                  <input
+                    type="text"
+                    value={editedName}
+                    onChange={(e) => setEditedName(e.target.value)}
+                    className="border p-2 w-full rounded-lg"
+                    placeholder="Name"
+                  />
+                    <div className="text-gray-500 self-start">Description</div>
                   <textarea
                     value={editedDesc}
                     onChange={(e) => setEditedDesc(e.target.value)}
@@ -119,20 +145,20 @@ function Page(){
                   />
 
                   <div className="text-gray-500">Category</div>
-                    <select
-                        name="category"
-                        value={editedCategory}
-                        onChange={(e) => setEditedCategory(e.target.value)}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
-                        required
-                        >
-                        <option value="">Select a category</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                            {category}
-                            </option>
-                        ))}
-                    </select>
+                  <select
+                    name="category"
+                    value={editedCategory}
+                    onChange={(e) => setEditedCategory(e.target.value)}
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                    required
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
 
                   <div className="text-gray-500">Deliver to</div>
                   <div className="font-medium text-primary">{product?.['product-request']?.deliver_to}</div>
@@ -192,9 +218,8 @@ function Page(){
                 </div>
               </div>
 
-	
-                            <div className="mt-8">
-                                {/* <div className="flex justify-between items-center font-bold">
+              <div className="mt-8">
+                {/* <div className="flex justify-between items-center font-bold">
                                     <div>Estimated total</div>
                                     <div className="text-right">$12,424.91</div>
                                 </div>
@@ -233,8 +258,7 @@ function Page(){
                                         <div className="text-right">$621.25</div>
                                     </div>
                                 </div> */}
-
-                            </div>
+              </div>
 
                         <div className="grid grid-cols-2 gap-4 mt-4">
                                 <button className="bg-red-600 text-white py-3 px-4 border-2 border-red-700 rounded-md font-medium hover:bg-red-800 transition-colors">
