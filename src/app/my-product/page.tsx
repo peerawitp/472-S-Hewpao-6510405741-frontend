@@ -5,8 +5,31 @@ import { useSession } from "next-auth/react";
 import { GetProductRequestResponseDTO } from "@/dtos/productRequest";
 import { useGetBuyerProductRequests } from "@/api/productRequest/useProductRequest";
 
-const ProductList: React.FC<{products: GetProductRequestResponseDTO[];}> = ({ products }) => {
+const ProductList: React.FC<{products: GetProductRequestResponseDTO[], loading: boolean}> = ({ products, loading }) => {
   const session = useSession();
+
+  if (loading) {
+      return (
+          <div className="flex justify-center items-center min-h-[300px]">
+              <div className="animate-pulse flex flex-col items-center">
+                  <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+                  <p className="mt-2 text-gray-600">Loading products...</p>
+              </div>
+          </div>
+      );
+  }
+
+  if (products.length === 0) {
+      return (
+          <div className="flex justify-center items-center min-h-[300px]">
+              <div className="text-center">
+                  <p className="text-lg text-gray-700">No product requests found</p>
+                  <p className="text-gray-500 mt-2">Check back later for new products</p>
+              </div>
+          </div>
+      );
+  }
+
   return (
     <div className="overflow-x-auto p-4">
       <div className="grid grid-cols-2 gap-6">
@@ -35,11 +58,6 @@ const ProductList: React.FC<{products: GetProductRequestResponseDTO[];}> = ({ pr
 function Page() {
   const { data: products, isLoading: loading } = useGetBuyerProductRequests();
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-
   return (
     <div className="px-8 bg-gray-50 rounded pt-8 pb-8 min-h-screen">
       <div className="flex items-center justify-between mb-6"> {/* ใช้ flexbox */}
@@ -54,7 +72,7 @@ function Page() {
         </Link>
       </div>
 
-      <ProductList products={products?.["product-requests"] ?? []} />
+      <ProductList products={products?.["product-requests"] ?? []} loading={loading} />
     </div>
   );
 }
