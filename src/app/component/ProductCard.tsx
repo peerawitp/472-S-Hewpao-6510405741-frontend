@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useGetPaginatedProductRequests } from "@/api/productRequest/useProductRequest";
 import MakeOfferButton from "./MakeOfferBtn";
 import { useEffect, useState } from "react";
+import { InView } from './in-view';
 
 function ProductCard() {
   const pathname = usePathname();
@@ -12,10 +13,9 @@ function ProductCard() {
   // State for pagination
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [totalProductCount, setTotalProductCount] = useState(0); // Track total available products
-  const pageSize = 5; // Items per page
+  const pageSize = 4; // Items per page
   
   // Fetch data with current page
   const { data: productData, isLoading: loadingProducts } = 
@@ -24,11 +24,6 @@ function ProductCard() {
   // Update allProducts when new data is fetched
   useEffect(() => {
     if (productData) {
-      // Store total count from API response (assuming API provides this info)
-      if (productData.totalPages !== undefined) {
-         setTotalProductCount(pageSize);
-      }
-
       // Add new products to the list, avoiding duplicates
       setAllProducts(prev => {
         // If it's the first page, just use the data directly
@@ -43,28 +38,14 @@ function ProductCard() {
       });
 
       // Check if we've loaded all available products
-      // Either based on total count (if available) or based on returned data size
-      // Check if we received a full page
       setHasMore(productData.data.length >= pageSize);
-      
-      // If no new products were added, hide the button regardless
-      if (productData.data.length === 0) {
-        setHasMore(false);
-      }
-      
-      console.log("Product data updated", productData.data.length);
-      console.log("Product data total", totalProductCount);
       setIsLoadingMore(false);
     }
   }, [productData, page, pageSize]);
 
-  // Handle load more button click
+  // Handle loading more products when scrolling to the end
   const handleLoadMore = () => {
-    // Check if we've already loaded all products
-    if (totalProductCount > 0 && allProducts.length >= totalProductCount) {
-      setHasMore(false);
-      return;
-    }
+    if (!hasMore || isLoadingMore) return;
     
     setIsLoadingMore(true);
     setPage(prev => prev + 1);
@@ -94,7 +75,7 @@ function ProductCard() {
     );
   }
 
-  // We have at least some products - render them
+  // Render products with infinite scroll
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -142,30 +123,26 @@ function ProductCard() {
         ))}
       </div>
       
-      {/* Load More Button - Only shown if hasMore is true */}
-      {hasMore ? (
-        <div className="flex justify-center py-6">
-          {isLoadingMore ? (
-            <div className="flex items-center space-x-2">
-              <div className="h-5 w-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
-              <span className="text-gray-600">Loading more products...</span>
-            </div>
-          ) : (
-            <button
-              onClick={handleLoadMore}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition-colors"
-            >
-              Load More Products
-            </button>
-          )}
-        </div>
-      ) : (
-        allProducts.length > 0 && (
-          <div className="text-center bg-gray-50 px-6 py-4 rounded-lg">
-            <p className="text-gray-500">You've seen all products</p>
-            <p className="text-gray-400 text-sm mt-1">No more items to display</p>
+      {/* Infinite Scroll component */}
+      {hasMore && (
+        <InView onInView={handleLoadMore}>
+          <div className="flex justify-center py-6">
+            {isLoadingMore && (
+              <div className="flex items-center space-x-2">
+                <div className="h-5 w-5 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                <span className="text-gray-600">Loading more products...</span>
+              </div>
+            )}
           </div>
-        )
+        </InView>
+      )}
+      
+      {/* End of content message */}
+      {!hasMore && allProducts.length > 0 && (
+        <div className="text-center bg-gray-50 px-6 py-4 rounded-lg">
+          <p className="text-gray-500">You've seen all products</p>
+          <p className="text-gray-400 text-sm mt-1">No more items to display</p>
+        </div>
       )}
     </div>
   );
