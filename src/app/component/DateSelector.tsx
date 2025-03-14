@@ -313,8 +313,8 @@ export default function DateSelector({
             disabled={isSubmitting || !isValid}
             className={`px-4 py-3 rounded flex-1 transition-colors ${
               isValid
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-blue-300 text-white cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-dark-primary"
+                : "bg-tertiary text-white cursor-not-allowed"
             }`}
           >
             {isSubmitting ? (
