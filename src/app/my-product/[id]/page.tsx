@@ -112,7 +112,7 @@ function Page() {
         <div>
           {isEditing ? (
             <div>
-              <div className="flex mb-6">
+              <div className="flex mb-5">
                 <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
                   <img
                     src={product?.["product-request"]?.images[0]}
@@ -136,7 +136,7 @@ function Page() {
                   <textarea
                     value={editedDesc}
                     onChange={(e) => setEditedDesc(e.target.value)}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full rounded-lg"
                     placeholder="Description"
                   />
 
@@ -171,7 +171,7 @@ function Page() {
                     type="number"
                     value={editedQuantity}
                     onChange={(e) => setEditedQuantity(Number(e.target.value))}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full rounded-lg"
                     placeholder="Quantity"
                   />
 
