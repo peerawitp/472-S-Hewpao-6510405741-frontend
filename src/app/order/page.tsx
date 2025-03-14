@@ -39,8 +39,8 @@ function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="bg-blue-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">1</span>
+              <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-dark-primary">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Create an Order</h3>
               <p className="text-gray-600">
@@ -49,8 +49,8 @@ function LandingPage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-blue-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">2</span>
+              <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-dark-primary">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Connect with Travelers</h3>
               <p className="text-gray-600">
@@ -59,8 +59,8 @@ function LandingPage() {
             </div>
 
             <div className="text-center">
-              <div className="bg-blue-100 rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-blue-600">3</span>
+              <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-dark-primary">3</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Receive Your Items</h3>
               <p className="text-gray-600">
