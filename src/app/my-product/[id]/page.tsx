@@ -133,7 +133,7 @@ function Page() {
           {isEditing ? (
             <div>
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
-                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
+                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center">
                   <div className="text-gray-500">Name</div>
                   <input
                     type="text"
@@ -189,7 +189,7 @@ function Page() {
                 </div>
               </div>
 
-              <div className="pt-5 flex justify-end gap-5">
+              <div className="pt-5 grid grid-cols-2 gap-5">
                 <button onClick={handleSaveClick} className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-dark-primary ease-out duration-300">Save</button>
                 <button onClick={handleCancelClick} className="bg-gray-300 px-3 py-2 rounded-lg">Cancel</button>
               </div>
