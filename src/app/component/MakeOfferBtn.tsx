@@ -146,6 +146,7 @@ const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
               </button>
             </div>
 
+
             <div className="p-4">
               <DateSelector
                 onClose={closePopup}

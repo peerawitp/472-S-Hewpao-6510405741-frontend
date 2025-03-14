@@ -25,22 +25,22 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <NextAuthProvider>
-        <QueryClientProvider>
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
-            <div>
-              <header className="sticky top-0">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <NextAuthProvider>
+          <QueryClientProvider>
+            <div className="flex flex-col min-h-screen">
+              <header className="sticky top-0 z-50 bg-white shadow-sm">
                 <Navbar />
               </header>
-              <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <main className="flex-grow">
                 {children}
               </main>
             </div>
-          </body>
-        </QueryClientProvider>
-      </NextAuthProvider>
+          </QueryClientProvider>
+        </NextAuthProvider>
+      </body>
     </html>
   );
 }
