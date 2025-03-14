@@ -42,9 +42,6 @@ function ProductRequestsPage() {
           <h1 className="text-3xl font-bold text-gray-900">
             These items were recently requested
           </h1>
-          <div className="text-sm text-gray-500">
-            Scroll down to see more items
-          </div>
         </div>
         
         {/* The ProductCard component handles its own infinite scrolling */}
