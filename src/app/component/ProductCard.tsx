@@ -97,7 +97,7 @@ function ProductCard() {
     return (
       <div className="flex justify-center items-center min-h-[300px]">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 rounded-full border-4 border-blue-500 border-t-transparent animate-spin"></div>
+          <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
           <p className="mt-2 text-gray-600">Loading products...</p>
         </div>
       </div>
