@@ -48,31 +48,31 @@ function Page() {
       <h1 className="text-3xl font-bold text-gray-900 mb-6">My Offers</h1>
       <div className="mb-4 flex">
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === "Pending" ? "bg-gray-200" : ""}`}
+            className={`w-full py-2 border-r border-primary bg-secondary text-black hover:bg-primary transition-colors hover:text-white ${selectedStatus === "Pending" ? "bg-dark-primary text-white" : ""}`}
             onClick={() => setSelectedStatus("Pending")}
           >
             {counts[DeliveryStatus.Pending]} {"Pending"}
         </button>
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === "Purchased" ? "bg-gray-200" : ""}`}
+            className={`w-full py-2 border-r border-primary bg-secondary text-black hover:bg-primary transition-colors hover:text-white ${selectedStatus === "Purchased" ? "bg-dark-primary text-white" : ""}`}
             onClick={() => setSelectedStatus("Purchased")}
           >
             {counts[DeliveryStatus.Purchased]} {"Purchased"}
         </button>
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === "PickedUp" ? "bg-gray-200" : ""}`}
+            className={`w-full py-2 border-r border-primary bg-secondary text-black hover:bg-primary transition-colors hover:text-white ${selectedStatus === "PickedUp" ? "bg-dark-primary text-white" : ""}`}
             onClick={() => setSelectedStatus("PickedUp")}
           >
             {counts[DeliveryStatus.PickedUp]} {"PickedUp"}
         </button>
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === "OutForDelivery" ? "bg-gray-200" : ""}`}
+            className={`w-full py-2 border-r border-primary bg-secondary text-black hover:bg-primary transition-colors hover:text-white ${selectedStatus === "OutForDelivery" ? "bg-dark-primary text-white" : ""}`}
             onClick={() => setSelectedStatus("OutForDelivery")}
           >
             {counts[DeliveryStatus.OutForDelivery]} {"Out For Delivery"}
         </button>
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === "Delivered" ? "bg-gray-200" : ""}`}
+            className={`w-full py-2 border-r border-primary bg-secondary text-black hover:bg-primary transition-colors hover:text-white ${selectedStatus === "Delivered" ? "bg-dark-primary text-white" : ""}`}
             onClick={() => setSelectedStatus("Delivered")}
           >
             {counts[DeliveryStatus.Delivered]} {"Delivered"}
