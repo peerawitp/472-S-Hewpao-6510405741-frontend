@@ -66,12 +66,6 @@ const UserDropdown = ({ email }: UserDropdownProps) => {
               My Offers
             </div>
           </Link>
-
-          <Link href="/transaction-history">
-            <div className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-              Transaction History
-            </div>
-          </Link>
           
           <div className="border-t border-gray-200 mt-1"></div>
           
