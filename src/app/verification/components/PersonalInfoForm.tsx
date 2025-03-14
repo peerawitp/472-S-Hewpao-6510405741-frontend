@@ -9,17 +9,21 @@ import BankDropdown from "./BankDropdown";
 
 interface PersonalInfoFormProps {
   formData: any;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
 }
 
-const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleChange }) => {
-
+const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
+  formData,
+  handleChange,
+}) => {
   const handleDateChange = (name: string, date: Date | null) => {
     const event = {
       target: {
         name,
-        value: date ? date.toISOString() : ""
-      }
+        value: date ? date.toISOString() : "",
+      },
     } as React.ChangeEvent<HTMLInputElement>;
     handleChange(event);
   };
@@ -69,7 +73,7 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
     const buddhistYear = date.getFullYear() + 543;
     return `${date.getDate()}/${date.getMonth() + 1}/${buddhistYear}`;
   };
-  
+
   const convertToGregorianDate = (dateString: string) => {
     if (!dateString) return null;
     const [day, month, year] = dateString.split("/").map(Number);
@@ -78,34 +82,36 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
 
   return (
     <div className="border-b pb-4">
-      <h2 className="text-lg font-semibold text-gray-800">Personal Information</h2>
-    
+      <h2 className="text-lg font-semibold text-gray-800">
+        Personal Information
+      </h2>
+
       {/* ID Number */}
       <div className="mt-4 flex gap-4">
-        <InputFieldGroup fields={
-          [
-            { label: "ID Number", name: "IDNumber" }
-          ]
-        } formData={formData} handleChange={handleChange} />
+        <InputFieldGroup
+          fields={[{ label: "ID Number", name: "IDNumber" }]}
+          formData={formData}
+          handleChange={handleChange}
+        />
       </div>
 
       {/* Infomation TH */}
       <div className="mt-4 flex gap-4">
         {/* First Name */}
         <div className="w-1/2">
-          <InputFieldGroup 
-            fields={[{ label: "First Name (Thai)", name: "firstNameTh" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "First Name (Thai)", name: "firstNameTh" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
 
         {/* Last Name*/}
         <div className="w-1/2">
-          <InputFieldGroup 
-            fields={[{ label: "Last Name (Thai)", name: "lastNameTh" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "Last Name (Thai)", name: "lastNameTh" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
       </div>
@@ -114,42 +120,44 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
       <div className="mt-4 flex gap-4">
         {/* First Name*/}
         <div className="w-1/2">
-          <InputFieldGroup 
-            fields={[{ label: "First Name (English)", name: "firstNameEn" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "First Name (English)", name: "firstNameEn" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
 
         {/* Last Name */}
         <div className="w-1/2">
-          <InputFieldGroup 
-            fields={[{ label: "Last Name (English)", name: "lastNameEn" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "Last Name (English)", name: "lastNameEn" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
       </div>
 
-
-
       <div className="mt-4 flex gap-4">
         {/* Date of Birth */}
         <div className="w-1/3">
-          <label className="block text-sm font-medium text-gray-700">Date of Birth </label>
-          <DatePicker 
-            selected={formData.dobTh ? new Date(formData.dobTh) : null} 
-            onChange={(date) => handleDateChange("dobTh", date)} 
+          <label className="block text-sm font-medium text-gray-700">
+            Date of Birth{" "}
+          </label>
+          <DatePicker
+            selected={formData.dobTh ? new Date(formData.dobTh) : null}
+            onChange={(date) => handleDateChange("dobTh", date)}
             dateFormat="MM-dd-yyyy"
             className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
           />
         </div>
         {/* Issue Date */}
         <div className="w-1/3">
-          <label className="block text-sm font-medium text-gray-700">Issue Date</label>
-          <DatePicker 
-            selected={formData.issueDate ? new Date(formData.issueDate) : null} 
-            onChange={(date) => handleDateChange("issueDate", date)} 
+          <label className="block text-sm font-medium text-gray-700">
+            Issue Date
+          </label>
+          <DatePicker
+            selected={formData.issueDate ? new Date(formData.issueDate) : null}
+            onChange={(date) => handleDateChange("issueDate", date)}
             dateFormat="MM-dd-yyyy"
             className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
           />
@@ -157,15 +165,18 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
 
         {/* Expire Date */}
         <div className="w-1/3">
-          <label className="block text-sm font-medium text-gray-700">Expire Date</label>
-          <DatePicker 
-            selected={formData.expireDate ? new Date(formData.expireDate) : null} 
-            onChange={(date) => handleDateChange("expireDate", date)} 
+          <label className="block text-sm font-medium text-gray-700">
+            Expire Date
+          </label>
+          <DatePicker
+            selected={
+              formData.expireDate ? new Date(formData.expireDate) : null
+            }
+            onChange={(date) => handleDateChange("expireDate", date)}
             dateFormat="MM-dd-yyyy"
             className="mt-1 block w-full border border-gray-300 px-3 py-2 rounded-md"
           />
         </div>
-
       </div>
 
       <hr className="mt-6 mb-6 border-t border-gray-300" />
@@ -173,51 +184,55 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ formData, handleCha
       {/* Account */}
       <div className="mt-4 flex gap-4">
         <div className="w-1/3">
-          <InputFieldGroup 
-            fields={[{ label: "Account Name", name: "account_name" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "Account Name", name: "account_name" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
         <div className="w-1/3">
-          <InputFieldGroup 
-            fields={[{ label: "Account Number", name: "account_number" }]} 
-            formData={formData} 
-            handleChange={handleChange} 
+          <InputFieldGroup
+            fields={[{ label: "Account Number", name: "account_number" }]}
+            formData={formData}
+            handleChange={handleChange}
           />
         </div>
         <div className="w-1/3">
-          <BankDropdown value={formData.bank ? formData.bank : null} onChange={handleBankChange} />
-          
+          <BankDropdown
+            value={formData.bank ? formData.bank : null}
+            onChange={handleBankChange}
+          />
         </div>
-
-
       </div>
-
 
       <hr className="mt-6 mb-6 border-t border-gray-300" />
 
       {/* Address */}
-        <InputFieldGroup 
-          fields={[{ label: "Address", name: "address" },]} 
-          formData={formData} 
-          handleChange={handleChange} 
-        />
+      <InputFieldGroup
+        fields={[{ label: "Address", name: "address" }]}
+        formData={formData}
+        handleChange={handleChange}
+      />
 
       {/* Province */}
-      <ProvinceDropdown value={formData.province ? formData.province : null} onChange={handleProvinceChange} />
+      <ProvinceDropdown
+        value={formData.province ? formData.province : null}
+        onChange={handleProvinceChange}
+      />
 
       {/* District */}
-      <DistrictsDropdown value={formData.district ? formData.district : null} onChange={handleDistrictChange} />
+      <DistrictsDropdown
+        value={formData.district ? formData.district : null}
+        onChange={handleDistrictChange}
+      />
 
       {/* Subdistrict */}
-      <SubdistrictsDropdown value={formData.subdistrict ? formData.subdistrict : null} onChange={handleSubDistrictChange} />
-
+      <SubdistrictsDropdown
+        value={formData.subdistrict ? formData.subdistrict : null}
+        onChange={handleSubDistrictChange}
+      />
     </div>
   );
 };
-
-
-
 
 export default PersonalInfoForm;
