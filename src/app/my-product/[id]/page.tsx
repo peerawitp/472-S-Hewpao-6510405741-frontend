@@ -1,6 +1,6 @@
 // pages/edit-product/[id].tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import {
   useGetProductRequestByID,
@@ -8,8 +8,6 @@ import {
   useCancelProductRequest,
 } from "@/api/productRequest/useProductRequest";
 import Link from "next/link";
-import { useGetOfferDetailByOfferID } from "@/api/offers/useOffer";
-import { Offer } from "@/interfaces/Offer";
 import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
@@ -79,7 +77,6 @@ function Page() {
   };
 
   const handleCancelOrder = () => {
-    console.log("cancel clicked");
     useCancelProduct.mutate(
       {
         delivery_status: DeliveryStatus.Cancel,
@@ -98,10 +95,10 @@ function Page() {
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedName(product?.["product-request"]?.name);
-    setEditedDesc(product?.["product-request"]?.desc);
-    setEditedCategory(product?.["product-request"]?.category);
-    setEditedQuantity(product?.["product-request"]?.quantity);
+    setEditedName(product!["product-request"]?.name);
+    setEditedDesc(product!["product-request"]?.desc);
+    setEditedCategory(product!["product-request"]?.category);
+    setEditedQuantity(product!["product-request"]?.quantity);
   };
 
   return (
@@ -227,63 +224,21 @@ function Page() {
                 </div>
               </div>
 
-              <div className="mt-8">
-                {/* <div className="flex justify-between items-center font-bold">
-                                    <div>Estimated total</div>
-                                    <div className="text-right">$12,424.91</div>
-                                </div>
-                                <p className="text-gray-500 text-sm mt-2">
-                                    Final price will be calculated based on your traveler's requested delivery reward.
-                                </p>
-        
-                                <div className="bg-gray-50 rounded-md p-4 mt-4">
-                                    <div className="grid grid-cols-[1fr,auto] gap-y-3 gap-x-4">
-                                        <div className="text-gray-500 flex items-center">
-                                            Product price
-                                        </div>
-                                        <div className="text-right">{product?.['product-request']?.budget}</div>
-        
-                                        <div className="text-gray-500 flex items-center">
-                                            US Sales tax
-                                        </div>
-                                        <div className="text-right">$800.00</div>
-        
-                                        <div className="text-gray-500 flex items-center">
-                                            Traveler reward
-                                        </div>
-                                        <div className="text-right">$630.00</div>
-        
-                                        <div className="text-gray-500 flex items-center">
-                                            Grabr fee
-                                        </div>
-                                        <div className="text-right">$373.66</div>
-        
-                                        <div className="text-gray-500 flex items-center">
-                                            Payment processing
-                                            <div className="ml-1 text-gray-400 cursor-help rounded-full border border-gray-300 w-4 h-4 flex items-center justify-center text-xs hover:bg-gray-100 transition-colors">
-                                                ?
-                                            </div>
-                                        </div>
-                                        <div className="text-right">$621.25</div>
-                                    </div>
-                                </div> */}
-              </div>
+              <div className="mt-8"></div>
 
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                                <button className="bg-red-600 text-white py-3 px-4 rounded-md font-medium hover:bg-red-800 transition-colors">
-                                    Cancel Order
-                                </button>
-                                <button onClick={handleEditClick} className="py-3 px-4 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center">
-                                    Edit Order
-                                    <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                    </svg>
-                                </button>
-                        </div>
-
-
-                    </>
-                )}
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                    <button className="bg-red-600 text-white py-3 px-4 rounded-md font-medium hover:bg-red-800 transition-colors">
+                        Cancel Order
+                    </button>
+                    <button onClick={handleEditClick} className="py-3 px-4 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center">
+                        Edit Order
+                        <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                    </button>
+                </div>
+                </>
+              )}
 
 	        </div>
 
