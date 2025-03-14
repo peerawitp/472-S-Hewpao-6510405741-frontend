@@ -141,7 +141,7 @@ function Page() {
 
             <button
               onClick={handleNextStep}
-              className="bg-green-500 text-white px-4 py-2 rounded-lg"
+              className={`px-4 py-2 rounded-lg ${ step === 3 ? "bg-green-500" : "bg-primary"} text-white`}
             >
               {step === 3 ? "Confirm" : "Next"}
             </button>

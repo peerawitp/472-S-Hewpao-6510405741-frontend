@@ -90,7 +90,7 @@ export default function ChatPage() {
                         <div ref={messagesEndRef} /> {/* Empty div for scrolling to bottom */}
                     </>
                 ) : (
-                    <p className="text-center text-gray-400">No messages yet.</p>
+                    <p className="text-center text-gray-400">No messages yet.</p> 
                 )}
             </div>
             

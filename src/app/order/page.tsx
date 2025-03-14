@@ -11,7 +11,7 @@ function LandingPage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white">
+      <section className="relative bg-primary text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
@@ -40,17 +40,17 @@ function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">1</span>
+                <span className="text-2xl font-bold text-dark-primary">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Create an Order</h3>
               <p className="text-gray-600">
-                Specify what you want, where it&#39;s from, and your budget.
+                Specify what you want, where it's from, and your budget.
               </p>
             </div>
 
             <div className="text-center">
               <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">2</span>
+                <span className="text-2xl font-bold text-dark-primary">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Connect with Travelers</h3>
               <p className="text-gray-600">
@@ -60,7 +60,7 @@ function LandingPage() {
 
             <div className="text-center">
               <div className="bg-tertiary rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-4">
-                <span className="text-2xl font-bold text-primary">3</span>
+                <span className="text-2xl font-bold text-dark-primary">3</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Receive Your Items</h3>
               <p className="text-gray-600">
@@ -91,7 +91,7 @@ function LandingPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900">What Our Customers Say</h2>
             <p className="mt-4 text-lg text-gray-600">
-              Hear from people who&#39;ve used our service
+              Hear from people who've used our service
             </p>
           </div>
 
@@ -105,7 +105,7 @@ function LandingPage() {
                 ))}
               </div>
               <p className="text-gray-600 mb-4">
-                &#34;I was able to get items from Japan that were impossible to find here. The process was smooth and my traveler was really helpful!&#34;
+                "I was able to get items from Japan that were impossible to find here. The process was smooth and my traveler was really helpful!"
               </p>
               <div className="font-medium">Sarah T.</div>
             </div>
@@ -119,7 +119,7 @@ function LandingPage() {
                 ))}
               </div>
               <p className="text-gray-600 mb-4">
-                &#34;As a traveler, I&#39;ve made extra money bringing items to people while on business trips. Great platform!"
+                "As a traveler, I've made extra money bringing items to people while on business trips. Great platform!"
               </p>
               <div className="font-medium">Michael R.</div>
             </div>
@@ -133,7 +133,7 @@ function LandingPage() {
                 ))}
               </div>
               <p className="text-gray-600 mb-4">
-                &#34;Got my limited edition sneakers from the US for much less than what resellers were charging. Highly recommend!"
+                "Got my limited edition sneakers from the US for much less than what resellers were charging. Highly recommend!"
               </p>
               <div className="font-medium">James L.</div>
             </div>

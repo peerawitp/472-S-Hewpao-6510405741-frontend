@@ -116,7 +116,7 @@ function CreateOrderPage() {
 
   const handleNext = () => {
     const isValid = validateForm(step);
-    
+
     if (isValid) {
       if (step < customSteps.length) setStep(step + 1);
     } else {
@@ -143,10 +143,10 @@ function CreateOrderPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Prevent multiple submissions
     if (isSubmitting) return;
-    
+
     // Validate all steps before submitting
     const isStep1Valid = validateForm(1);
     if (!isStep1Valid) {
@@ -162,7 +162,7 @@ function CreateOrderPage() {
       });
       return;
     }
-    
+
     const isStep2Valid = validateForm(2);
     if (!isStep2Valid) {
       setStep(2);
@@ -174,7 +174,7 @@ function CreateOrderPage() {
       }));
       return;
     }
-    
+
     try {
       setIsSubmitting(true);
       await createProductRequest.mutateAsync(orderData);
@@ -196,12 +196,12 @@ function CreateOrderPage() {
     const value = e.target.value;
     const checked =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : false;
-    
+
     setOrderData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-    
+
     // Mark field as touched when changed
     setTouched(prev => ({
       ...prev,
@@ -211,7 +211,7 @@ function CreateOrderPage() {
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name } = e.target;
-    
+
     // Mark field as touched when blurred
     setTouched(prev => ({
       ...prev,
@@ -229,7 +229,7 @@ function CreateOrderPage() {
       ...prev,
       images: [...prev.images, ...acceptedFiles],
     }));
-    
+
     // Mark images as touched
     setTouched(prev => ({
       ...prev,
@@ -239,7 +239,7 @@ function CreateOrderPage() {
 
   const handleImagesChange = (newImages: File[]) => {
     setOrderData((prev) => ({ ...prev, images: newImages }));
-    
+
     // Mark images as touched
     setTouched(prev => ({
       ...prev,
@@ -279,7 +279,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.name && errors.name 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                 />
@@ -300,7 +300,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.category && errors.category 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                 >
@@ -330,7 +330,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.desc && errors.desc 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter product details like model, size, color, etc."
@@ -373,7 +373,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.budget && errors.budget 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter your budget"
@@ -409,7 +409,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.quantity && errors.quantity 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter quantity"
@@ -433,14 +433,14 @@ function CreateOrderPage() {
                   name="check_service"
                   checked={orderData.check_service}
                   onChange={handleChange}
-                  className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                  className="h-4 w-4 text-dark-primary  border-gray-300 rounded focus:ring-primary accent-primary"
                 />
 
                 <label
                   htmlFor="check_service"
                   className="ml-2 text-sm text-gray-700"
                 >
-                  200 THB for Verify Product Service (Optional)
+                  200 THB for Verify Product Service <span className="text-[#696969]">(Optional)</span>
                 </label>
               </div>
             </>
@@ -462,7 +462,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.from && errors.from 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Country or city of origin"
@@ -485,7 +485,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.to && errors.to 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Destination country or city"
@@ -570,7 +570,7 @@ function CreateOrderPage() {
               </div>
             </>
           )}
-          
+
           {/* Navigation Buttons */}
           <div className="flex justify-between mt-8">
             {step > 1 && (

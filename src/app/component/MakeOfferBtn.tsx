@@ -145,8 +145,6 @@ const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
                 </svg>
               </button>
             </div>
-
-
             <div className="p-4">
               <DateSelector
                 onClose={closePopup}
