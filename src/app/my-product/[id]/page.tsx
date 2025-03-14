@@ -1,6 +1,6 @@
 // pages/edit-product/[id].tsx
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import {
   useGetProductRequestByID,
@@ -8,6 +8,8 @@ import {
   useCancelProductRequest,
 } from "@/api/productRequest/useProductRequest";
 import Link from "next/link";
+import { useGetOfferDetailByOfferID } from "@/api/offers/useOffer";
+import { Offer } from "@/interfaces/Offer";
 import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
@@ -96,10 +98,10 @@ function Page() {
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedName(product!["product-request"]?.name);
-    setEditedDesc(product!["product-request"]?.desc);
-    setEditedCategory(product!["product-request"]?.category);
-    setEditedQuantity(product!["product-request"]?.quantity);
+    setEditedName(product?.["product-request"]?.name);
+    setEditedDesc(product?.["product-request"]?.desc);
+    setEditedCategory(product?.["product-request"]?.category);
+    setEditedQuantity(product?.["product-request"]?.quantity);
   };
 
   return (
@@ -278,13 +280,13 @@ function Page() {
                                     </svg>
                                 </button>
                         </div>
-                        
-                        
+
+
                     </>
                 )}
-	                
+
 	        </div>
-	
+
             <div className="mt-4">
                 {offerList.map((offerId) => (
                     <OfferDetails key={offerId} id={offerId} />
