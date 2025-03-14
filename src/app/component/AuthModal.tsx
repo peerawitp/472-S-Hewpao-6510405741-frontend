@@ -1,10 +1,15 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface AuthModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
+}
+
+interface FormErrors {
+  email?: string;
+  password?: string;
 }
 
 const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
@@ -12,24 +17,109 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+    confirmPassword: false
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFacebookSignIn = async () => {
-    const res = await signIn("facebook");
-    console.log(res);
+  // Validate form when inputs change
+  useEffect(() => {
+    validateForm();
+  }, [email, password, confirmPassword, isSignUp]);
+
+  const validateForm = () => {
+    const newErrors: FormErrors = {};
+    
+    // Email validation
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Email address is invalid";
+    }
+    
+    // Password validation
+    if (!password) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    }
+    
+    // Confirm password validation (only for signup)
+    if (isSignUp && password !== confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleEmailSignIn = (e: React.FormEvent) => {
+  const handleFacebookSignIn = async () => {
+    try {
+      const res = await signIn("facebook");
+      console.log(res);
+    } catch (error) {
+      console.error("Facebook sign in error:", error);
+    }
+  };
+
+  const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Add your email sign-in logic here
-    console.log("Email:", email, "Password:", password);
+    
+    // Mark all fields as touched
+    setTouched({
+      email: true,
+      password: true,
+      confirmPassword: true
+    });
+    
+    // Validate the form
+    const isValid = validateForm();
+    
+    if (!isValid) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Add your email sign-in logic here
+      console.log("Email:", email, "Password:", password);
+      
+      if (isSignUp) {
+        // Register logic
+        // Example: await createUser(email, password);
+      } else {
+        // Login logic
+        // Example: await signIn("credentials", { email, password });
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleGoogleSignIn = async () => {
-    const res = await signIn("google");
-    console.log(res);
+    try {
+      const res = await signIn("google");
+      console.log(res);
+    } catch (error) {
+      console.error("Google sign in error:", error);
+    }
   };
 
-  // ป้องกัน event bubbling
+  const handleInputBlur = (field: keyof typeof touched) => {
+    setTouched(prev => ({
+      ...prev,
+      [field]: true
+    }));
+  };
+
+  // Prevent event bubbling
   const handleModalContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
@@ -89,9 +179,17 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    onBlur={() => handleInputBlur('email')}
+                    className={`mt-1 block w-full rounded-md border ${
+                      touched.email && errors.email 
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    } px-3 py-2 text-sm focus:outline-none focus:ring-1`}
                     required
                   />
+                  {touched.email && errors.email && (
+                    <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                  )}
                 </div>
                 <div>
                   <label
@@ -105,15 +203,63 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    onBlur={() => handleInputBlur('password')}
+                    className={`mt-1 block w-full rounded-md border ${
+                      touched.password && errors.password 
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                        : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    } px-3 py-2 text-sm focus:outline-none focus:ring-1`}
                     required
                   />
+                  {touched.password && errors.password && (
+                    <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                  )}
                 </div>
+                
+                {isSignUp && (
+                  <div>
+                    <label
+                      htmlFor="confirmPassword"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      onBlur={() => handleInputBlur('confirmPassword')}
+                      className={`mt-1 block w-full rounded-md border ${
+                        touched.confirmPassword && errors.confirmPassword 
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                          : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                      } px-3 py-2 text-sm focus:outline-none focus:ring-1`}
+                      required
+                    />
+                    {touched.confirmPassword && errors.confirmPassword && (
+                      <p className="mt-1 text-sm text-red-500">{errors.confirmPassword}</p>
+                    )}
+                  </div>
+                )}
+                
                 <button
                   type="submit"
-                  className="w-full bg-foreground text-background rounded-lg px-4 py-2 hover:bg-[#494949] transition-colors"
+                  disabled={isSubmitting}
+                  className={`w-full rounded-lg px-4 py-2 transition-colors ${
+                    isSubmitting 
+                      ? "bg-gray-400 text-white cursor-not-allowed" 
+                      : "bg-foreground text-background hover:bg-[#494949]"
+                  }`}
                 >
-                  {isSignUp ? "Sign Up" : "Sign In"}
+                  {isSubmitting ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
+                      <span>{isSignUp ? "Creating Account..." : "Signing In..."}</span>
+                    </div>
+                  ) : (
+                    isSignUp ? "Sign Up" : "Sign In"
+                  )}
                 </button>
               </form>
               <p className="text-center text-sm text-gray-600">
@@ -125,6 +271,14 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
                   onClick={(e) => {
                     e.stopPropagation();
                     setIsSignUp(!isSignUp);
+                    // Reset form when switching modes
+                    setErrors({});
+                    setTouched({
+                      email: false,
+                      password: false,
+                      confirmPassword: false
+                    });
+                    setConfirmPassword("");
                   }}
                 >
                   {isSignUp ? "Sign In" : "Sign Up"}
