@@ -14,7 +14,8 @@ function ProductCard() {
   const [hasMore, setHasMore] = useState(true);
   const [allProducts, setAllProducts] = useState<any[]>([]);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const pageSize = 4; // Items per page
+  const [totalProductCount, setTotalProductCount] = useState(0); // Track total available products
+  const pageSize = 5; // Items per page
   
   // Fetch data with current page
   const { data: productData, isLoading: loadingProducts } = 
@@ -23,6 +24,11 @@ function ProductCard() {
   // Update allProducts when new data is fetched
   useEffect(() => {
     if (productData) {
+      // Store total count from API response (assuming API provides this info)
+      if (productData.totalPages !== undefined) {
+         setTotalProductCount(pageSize);
+      }
+
       // Add new products to the list, avoiding duplicates
       setAllProducts(prev => {
         // If it's the first page, just use the data directly
@@ -36,22 +42,30 @@ function ProductCard() {
         return [...prev, ...newProducts];
       });
 
-      // Check if there are more products to load
-      // Only show "Load More" if we received the full page size
-      const shouldShowMore = productData.data.length >= pageSize;
-      setHasMore(shouldShowMore);
+      // Check if we've loaded all available products
+      // Either based on total count (if available) or based on returned data size
+      // Check if we received a full page
+      setHasMore(productData.data.length >= pageSize);
       
       // If no new products were added, hide the button regardless
       if (productData.data.length === 0) {
         setHasMore(false);
       }
       
+      console.log("Product data updated", productData.data.length);
+      console.log("Product data total", totalProductCount);
       setIsLoadingMore(false);
     }
   }, [productData, page, pageSize]);
 
   // Handle load more button click
   const handleLoadMore = () => {
+    // Check if we've already loaded all products
+    if (totalProductCount > 0 && allProducts.length >= totalProductCount) {
+      setHasMore(false);
+      return;
+    }
+    
     setIsLoadingMore(true);
     setPage(prev => prev + 1);
   };
