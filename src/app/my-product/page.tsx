@@ -11,7 +11,7 @@ interface ProductListProps {
 const ProductList = ({ products }: ProductListProps) => {
   return (
     <div className="overflow-x-auto p-4">
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <Link key={product.id} href={`/my-product/${product.id}`} passHref>
             <div className="flex flex-col gap-3 border border-gray-200 h-full p-4 rounded-lg shadow-md bg-white cursor-pointer">
