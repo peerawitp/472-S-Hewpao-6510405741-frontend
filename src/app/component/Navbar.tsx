@@ -54,7 +54,7 @@ const Navbar = () => {
                 ) : (
                     <Link
                         href="/signup"
-                        className="font-bold text-gray-500 hover:text-blue-500"
+                        className="font-bold text-gray-500 hover:text-primary"
                     >
                         Order
                     </Link>
@@ -79,8 +79,12 @@ const Navbar = () => {
                 </Link>
               ) : (
                 <Link
-                  href="/verification"
-                  className="font-bold text-gray-500 hover:text-blue-500"
+                    href="/verification"
+                    className={`relative font-bold ease-in-out duration-300 ${
+                        pathname === "/verification" ? "text-primary" : "text-gray-500"
+                    } hover:text-primary after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-primary after:transition-transform after:duration-200 ${
+                        pathname === "/verification" ? "after:scale-x-100" : "after:scale-x-0"
+                    } hover:after:scale-x-100 focus:after:scale-x-100`}
                 >
                   Travel
                 </Link>
@@ -88,7 +92,7 @@ const Navbar = () => {
             ) : (
               <Link
                 href="/signup"
-                className="font-bold text-gray-500 hover:text-blue-500"
+                className="font-bold text-gray-500 hover:text-primary"
               >
                 Travel
               </Link>
