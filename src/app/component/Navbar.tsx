@@ -35,14 +35,14 @@ const Navbar = () => {
   return (
     <>
       <nav className="grid grid-cols-3 px-6 py-4 bg-white shadow-sm items-center">
-        <Link href="/" className="w-fit">
-          <div className="text-primary text-xl font-bold hover:text-dark-primary ease-in-out duration-300">HewPao</div>
+        <Link href="/">
+          <div className="text-xl font-bold hover:text-gray-600">HewPao</div>
         </Link>
         <div className="flex justify-center gap-20">
           <div>
             {session.data && session.data.user ? (
               <Link
-                href="/"
+                href="/order"
                 className={`relative font-bold ${pathname === "/order" ? "text-blue-500" : "text-gray-500"
                   } hover:text-blue-500 after:block after:content-[''] after:absolute after:left-0 after:bottom-[-2px] after:w-full after:h-[2px] after:bg-blue-500 after:transition-transform after:duration-200 ${pathname === "/order" ? "after:scale-x-100" : "after:scale-x-0"
                   } hover:after:scale-x-100 focus:after:scale-x-100`}
@@ -99,7 +99,7 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 hover:bg-gray-600 text-sm h-10 px-4 cursor-pointer text-white font-medium"
+              className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground gap-2 hover:bg-gray-600 text-sm h-10 px-4 cursor-pointer text-[#FFFFFF] font-medium"
             >
               Sign In
             </button>
