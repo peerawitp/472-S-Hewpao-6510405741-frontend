@@ -16,7 +16,9 @@ const BankDropdown: React.FC<BankDropdownProps> = ({ value, onChange }) => {
   };
 
   if (isLoading) {
-    return <div>Loading banks...</div>;
+    return <div className="flex items-center h-28">
+        <div>Loading banks...</div>
+    </div>;
   }
 
   if (error) {

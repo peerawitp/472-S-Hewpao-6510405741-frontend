@@ -31,7 +31,7 @@ const PayoutAccountForm: React.FC<PayoutAccountFormProps> = ({
       </h2>
 
       {/* Account */}
-      <div className="mt-4 flex gap-4">
+      <div className="mt-4 flex gap-4 items-end">
         <div className="w-1/3">
           <InputFieldGroup
             fields={[{ label: "Account Name", name: "account_name" }]}
