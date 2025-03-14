@@ -2,6 +2,7 @@
 import { signIn } from "next-auth/react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface AuthModalProps {
   isModalOpen: boolean;
@@ -14,6 +15,7 @@ interface FormErrors {
 }
 
 const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
+  const router = useRouter();
   const [showEmailForm, setShowEmailForm] = useState(false);
 
   // Form fields
@@ -26,10 +28,13 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
     password: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   // Validate form when inputs change
   useEffect(() => {
     validateForm();
+    // Clear login error when user changes inputs
+    if (loginError) setLoginError(null);
   }, [email, password]);
 
   const validateForm = () => {
@@ -53,15 +58,6 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleFacebookSignIn = async () => {
-    try {
-      const res = await signIn("facebook");
-      console.log(res);
-    } catch (error) {
-      console.error("Facebook sign in error:", error);
-    }
-  };
-
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -79,13 +75,26 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
     }
 
     setIsSubmitting(true);
+    setLoginError(null);
 
     try {
-      // Login logic
-      console.log("Email:", email, "Password:", password);
-      // Example: await signIn("credentials", { email, password });
+      // Use NextAuth's signIn function with credentials provider
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false, // Don't redirect automatically
+      });
+
+      if (result?.error) {
+        setLoginError("Invalid email or password. Please try again.");
+      } else if (result?.ok) {
+        // Success, close modal and redirect if needed
+        setIsModalOpen(false);
+        router.refresh(); // Refresh the page to update auth state
+      }
     } catch (error) {
       console.error("Authentication error:", error);
+      setLoginError("An unexpected error occurred. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -93,8 +102,7 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
 
   const handleGoogleSignIn = async () => {
     try {
-      const res = await signIn("google");
-      console.log(res);
+      await signIn("google", { callbackUrl: window.location.origin });
     } catch (error) {
       console.error("Google sign in error:", error);
     }
@@ -149,6 +157,12 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
           </button>
         </div>
         <div className="space-y-4">
+          {loginError && (
+            <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
+              {loginError}
+            </div>
+          )}
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center"></div>
           </div>
@@ -222,7 +236,7 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
                 </button>
               </form>
 
-              {/* Sign Up Button/Link */}
+              {/* Sign Up Link */}
               <div className="flex items-center justify-center gap-2">
                 <p className="text-sm text-gray-600">Don't have an account?</p>
                 <Link
@@ -233,7 +247,6 @@ const AuthModal = ({ isModalOpen, setIsModalOpen }: AuthModalProps) => {
                   Sign Up
                 </Link>
               </div>
-
 
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
