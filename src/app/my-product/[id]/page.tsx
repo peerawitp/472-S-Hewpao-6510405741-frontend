@@ -45,7 +45,14 @@ function Page() {
   }, [product]);
 
   if (loading) {
-    return <div>..Loading</div>;
+    return (
+        <div className="flex justify-center items-center min-h-[300px]">
+            <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+                <p className="mt-2 text-gray-600">Loading product...</p>
+            </div>
+        </div>
+    );
   }
 
   const handleEditClick = () => {
@@ -261,7 +268,7 @@ function Page() {
               </div>
 
                         <div className="grid grid-cols-2 gap-4 mt-4">
-                                <button className="bg-red-600 text-white py-3 px-4 border-2 border-red-700 rounded-md font-medium hover:bg-red-800 transition-colors">
+                                <button className="bg-red-600 text-white py-3 px-4 rounded-md font-medium hover:bg-red-800 transition-colors">
                                     Cancel Order
                                 </button>
                                 <button onClick={handleEditClick} className="py-3 px-4 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center">
@@ -284,9 +291,8 @@ function Page() {
                 ))}
             </div>
 	    </div>
-	
-
-	</div>
+	  </div>
+  );
 }
 
 export default Page;
