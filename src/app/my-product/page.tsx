@@ -23,7 +23,7 @@ const ProductList: React.FC<{products: GetProductRequestResponseDTO[], loading: 
       return (
           <div className="flex justify-center items-center min-h-[300px]">
               <div className="text-center">
-                  <p className="text-lg text-gray-700">No product requests found</p>
+                  <p className="text-lg text-gray-700 font-bold">No product requests found</p>
                   <p className="text-gray-500 mt-2">Check back later for new products</p>
               </div>
           </div>
