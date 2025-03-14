@@ -7,6 +7,7 @@ import {
   GetProductRequestResponseDTO,
   ProductRequestResponse,
   UpdateProductRequestDTO,
+  UpdateProductRequestStatusDTO,
 } from "@/dtos/productRequest";
 
 const createProductRequest = async (
@@ -39,7 +40,7 @@ const createProductRequest = async (
 
 const getProductRquestsByID = async (id: number) => {
   const session = await getSession();
-  const { data } = await axiosInstance.get<ProductRequestResponse>(
+  const { data } = await axiosInstance.get<GetProductRequestResponseDTO>(
     `/product-requests/get/${id}`,
     {
       headers: {
@@ -87,7 +88,10 @@ const getTravelerProductRequests = async () => {
   return data;
 };
 
-const updateProductRequest = async (productData: UpdateProductRequestDTO, id: number) => {
+const updateProductRequest = async (
+  productData: UpdateProductRequestDTO,
+  id: number,
+) => {
   const session = await getSession();
   const { data } = await axiosInstance.put(
     `/product-requests/${id}`,
@@ -96,19 +100,43 @@ const updateProductRequest = async (productData: UpdateProductRequestDTO, id: nu
       headers: {
         Authorization: `Bearer ${session?.user?.access_token}`,
       },
-    }
+    },
   );
   return data;
 };
 
-const useUpdateProductRequest = (id: number) => {
-  const queryClient = useQueryClient(); 
-  return useMutation({
-      mutationFn: async (productData : UpdateProductRequestDTO) =>
-          updateProductRequest(productData, id),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ["productRquests", id] });
+const cancelProductRequest = async (
+  req: UpdateProductRequestStatusDTO,
+  id: number,
+) => {
+  const session = await getSession();
+  const { data } = await axiosInstance.put(
+    `/product-requests/status/${id}`,
+    req,
+    {
+      headers: {
+        Authorization: `Bearer ${session?.user?.access_token}`,
       },
+    },
+  );
+  return data;
+};
+
+const useCancelProductRequest = (id: number) => {
+  return useMutation({
+    mutationFn: async (req: UpdateProductRequestStatusDTO) =>
+      cancelProductRequest(req, id),
+  });
+};
+
+const useUpdateProductRequest = (id: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (productData: UpdateProductRequestDTO) =>
+      updateProductRequest(productData, id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["productRquests", id] });
+    },
   });
 };
 
@@ -157,4 +185,5 @@ export {
   useGetBuyerProductRequests,
   useGetTravelerProductRequests,
   useUpdateProductRequest,
+  useCancelProductRequest,
 };
