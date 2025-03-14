@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axiosInstance from "@/lib/axiosInstance";
 import { getSession } from "next-auth/react";
 import { CreateProductRequest } from "@/interfaces/ProductRequest";
@@ -6,6 +6,7 @@ import {
   GetPaginatedProductRequestRespnoseDTO,
   GetProductRequestResponseDTO,
   ProductRequestResponse,
+  UpdateProductRequestDTO,
 } from "@/dtos/productRequest";
 
 const createProductRequest = async (
@@ -86,6 +87,31 @@ const getTravelerProductRequests = async () => {
   return data;
 };
 
+const updateProductRequest = async (productData: UpdateProductRequestDTO, id: number) => {
+  const session = await getSession();
+  const { data } = await axiosInstance.put(
+    `/product-requests/${id}`,
+    productData,
+    {
+      headers: {
+        Authorization: `Bearer ${session?.user?.access_token}`,
+      },
+    }
+  );
+  return data;
+};
+
+const useUpdateProductRequest = (id: number) => {
+  const queryClient = useQueryClient(); 
+  return useMutation({
+      mutationFn: async (productData : UpdateProductRequestDTO) =>
+          updateProductRequest(productData, id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["productRquests", id] });
+      },
+  });
+};
+
 const useGetBuyerProductRequests = () => {
   return useQuery({
     queryKey: ["productRquests"],
@@ -130,4 +156,5 @@ export {
   useGetPaginatedProductRequests,
   useGetBuyerProductRequests,
   useGetTravelerProductRequests,
+  useUpdateProductRequest,
 };

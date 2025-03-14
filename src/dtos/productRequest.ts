@@ -1,8 +1,8 @@
-import { Offer } from "@/interfaces/Offer";
+import { ResponseOffer } from "./Offer";
 
 export interface ProductRequestResponse {
   message: string;
-  "product-requests": GetProductRequestResponseDTO[];
+  "product-request": GetProductRequestResponseDTO[];
 }
 
 export interface GetProductRequestResponseDTO {
@@ -22,7 +22,7 @@ export interface GetProductRequestResponseDTO {
   check_service: boolean;
 
   selected_offer_id: number;
-  offers: Offer[];
+  offers: ResponseOffer[];
 
   create_at: Date;
   updated_at: Date;
@@ -35,4 +35,13 @@ export interface GetPaginatedProductRequestRespnoseDTO<T> {
   limit: number;
   totalRows: number;
   totalPages: number;
+}
+
+export interface UpdateProductRequestDTO{
+  name: string;
+  desc: string;
+  quantity: number;
+  category: string;
+
+  selected_offer_id: number;
 }
