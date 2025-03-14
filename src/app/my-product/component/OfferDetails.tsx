@@ -23,10 +23,10 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ id }) => {
   const handleSelectOffer = () => {
     useUpdateProduct.mutate(
       {
-        name: product?.["product-request"].name,
-        desc: product?.["product-request"].desc,
-        quantity: product?.["product-request"].quantity,
-        category: product?.["product-request"].category,
+        name: product!["product-request"].name,
+        desc: product!["product-request"].desc,
+        quantity: product!["product-request"].quantity,
+        category: product!["product-request"].category,
         selected_offer_id: id,
       },
       {
