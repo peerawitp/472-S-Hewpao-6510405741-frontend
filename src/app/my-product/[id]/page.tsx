@@ -13,21 +13,27 @@ import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
 import { useCheckout } from "@/api/checkout/useCheckout";
+import { GetProductRequestResponseDTO } from "@/dtos/productRequest";
 
 function Page() {
-  const router = useParams();
-  const { id } = router;
+  const param = useParams();
+  const router = useRouter();
 
-  const { data: product, isLoading: loading } = useGetProductRequestByID(
+  const { id } = param;
+
+  const { data: productData, isLoading: loading } = useGetProductRequestByID(
     Number(id),
   );
+
+  const product = productData?.["product-request"] as GetProductRequestResponseDTO;
+
   const useUpdateProduct = useUpdateProductRequest(Number(id));
   const useCancelProduct = useCancelProductRequest(Number(id));
   const useCheckoutHook = useCheckout();
   const routerNavigation = useRouter();
 
   const offerList: number[] =
-    product?.["product-request"].offers?.map(
+  product?.offers.map(
       (offer: ResponseOffer) => offer.ID,
     ) || [];
 
@@ -40,13 +46,13 @@ function Page() {
   const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
 
   React.useEffect(() => {
-    if (product?.["product-request"]) {
-      setEditedName(product?.["product-request"]?.name);
-      setEditedDesc(product?.["product-request"]?.desc);
-      setEditedCategory(product?.["product-request"]?.category);
-      setEditedQuantity(product?.["product-request"]?.quantity);
+    if (product) {
+      setEditedName(product?.name);
+      setEditedDesc(product?.desc);
+      setEditedCategory(product?.category);
+      setEditedQuantity(product?.quantity);
     }
-  }, [product]);
+  }, [productData]);
 
   if (loading) {
     return <div>..Loading</div>;
@@ -92,16 +98,16 @@ function Page() {
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedName(product!["product-request"]?.name);
-    setEditedDesc(product!["product-request"]?.desc);
-    setEditedCategory(product!["product-request"]?.category);
-    setEditedQuantity(product!["product-request"]?.quantity);
+    setEditedName(product.name);
+    setEditedDesc(product.desc);
+    setEditedCategory(product.category);
+    setEditedQuantity(product.quantity);
   };
 
   const handleCheckoutStripe = () => {
     useCheckoutHook.mutate(
       {
-        product_request_id: product?.["product-request"]?.id as number,
+        product_request_id: product?.id as number,
         payment_gateway: "stripe",
       },
       {
@@ -114,6 +120,13 @@ function Page() {
       },
     );
   };
+
+  const handleChat = () => {
+    console.log("Test chat")
+    if (product?.id) {
+      router.push(`/chat/${product.id}`);
+    }
+  }
 
   return (
     <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
@@ -129,13 +142,17 @@ function Page() {
           <h1 className="text-primary-500 font-bold text-xl">
             Product details
           </h1>
-          <div className="flex items-center mb-4">
+          <div className="flex items-center justify-between mb-4">
             <h2 className="text-md font-bold">
-              Status:{" "}
-              <span className="text-blue-600">
-                {product?.["product-request"]?.delivery_status}
-              </span>
+              Status: <span className="text-blue-600">{product?.delivery_status}</span>
             </h2>
+            <button
+              onClick={handleChat}
+              disabled={product.selected_offer_id === null}
+              className="bg-blue-500 text-white p-2 rounded"
+            >
+              Chat
+            </button>
           </div>
         </div>
         <div>
@@ -144,11 +161,11 @@ function Page() {
               <div className="flex mb-5">
                 <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
                   <Image
-                    src={product!["product-request"]?.images[0]}
-                    alt={product!["product-request"]?.name}
+                    src={product.images[0]}
+                    alt={product.name}
                     width={180}
                     height={180}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform"
+                    className="w-full h-full  "
                   />
                 </div>
               </div>
@@ -189,12 +206,12 @@ function Page() {
 
                   <div className="text-gray-500">Deliver to</div>
                   <div className="font-medium">
-                    {product?.["product-request"]?.deliver_to}
+                    {product?.deliver_to}
                   </div>
 
                   <div className="text-gray-500">From</div>
                   <div className="font-medium">
-                    {product?.["product-request"]?.deliver_from}
+                    {product?.deliver_from}
                   </div>
 
                   <div className="text-gray-500">Quantity</div>
@@ -208,12 +225,12 @@ function Page() {
 
                   <div className="text-gray-500">Order number</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.id}
+                    {product?.id}
                   </div>
 
                   <div className="text-gray-500">Budget</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.budget}
+                    {product?.budget}
                   </div>
                 </div>
               </div>
@@ -237,12 +254,12 @@ function Page() {
             <>
               <div className="flex mb-6">
                 <div className="grid grid-cols-3 w-full gap-4">
-                  {product?.["product-request"].images.map((image, index) => {
+                  {product.images.map((image, index) => {
                     return (
                       <div key={index}>
                         <Image
                           src={image}
-                          alt={product!["product-request"]?.name}
+                          alt={product.name}
                           width={180}
                           height={180}
                           className="w-full h-48 object-cover hover:scale-105 transition-transform rounded-md"
@@ -257,55 +274,55 @@ function Page() {
                 <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
                   <div className="text-gray-500">Name</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.name}
+                    {product?.name}
                   </div>
 
                   <div className="text-gray-500">Description</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.desc}
+                    {product?.desc}
                   </div>
 
                   <div className="text-gray-500">Category</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.category}
+                    {product?.category}
                   </div>
 
                   <div className="text-gray-500">Deliver to</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.deliver_to}
+                    {product?.deliver_to}
                   </div>
 
                   <div className="text-gray-500">From</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.deliver_from}
+                    {product?.deliver_from}
                   </div>
 
                   <div className="text-gray-500">Quantity</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.quantity}
+                    {product?.quantity}
                   </div>
 
                   <div className="text-gray-500">Order number</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.id}
+                    {product?.id}
                   </div>
 
                   <div className="text-gray-500">Budget</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.budget}
+                    {product?.budget}
                   </div>
 
                   <div className="text-gray-500">Selected Offer ID</div>
                   <div className="font-medium text-right">
-                    {product?.["product-request"]?.selected_offer_id}
+                    {product?.selected_offer_id}
                   </div>
                 </div>
               </div>
 
               <div className="mt-8"></div>
 
-              {product?.["product-request"].selected_offer_id !== null &&
-                product?.["product-request"].delivery_status ===
+              {product.selected_offer_id !== null &&
+                product.delivery_status ===
                   DeliveryStatus.Opening && (
                   <button
                     onClick={handleCheckoutStripe}
@@ -344,7 +361,7 @@ function Page() {
           )}
         </div>
 
-        {product?.["product-request"].delivery_status ===
+        {product.delivery_status ===
           DeliveryStatus.Opening && (
           <>
             <h3 className="font-bold uppercase text-lg tracking-wider my-4">

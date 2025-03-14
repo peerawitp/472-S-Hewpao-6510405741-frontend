@@ -1,9 +1,11 @@
 import { useUpdateProductRequestStatus } from "@/api/productRequest/useProductRequest";
 import { GetProductRequestResponseDTO,UpdateProductRequestStatusDTO } from "@/dtos/productRequest";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const MyOfferCard = ({ product,refetch }: { product: GetProductRequestResponseDTO; refetch: () => void },) => {
+	const router = useRouter();
 	const [currentStatus, setCurrentStatus] = useState<string>(
 		product.delivery_status
 	  );
@@ -44,6 +46,13 @@ const MyOfferCard = ({ product,refetch }: { product: GetProductRequestResponseDT
 		setNewStatus(currentStatus);
 		setIsEditingStatus(false);
 	};
+
+	const handleChat = () => {
+		console.log("Test chat")
+		if (product?.id) {
+		  router.push(`/chat/${product.id}`);
+		}
+	  }
 
 	return (
 	        <div className="bg-white rounded-xl shadow-sm overflow-hidden transform hover:shadow-md transition-all duration-200 border border-gray-100">
@@ -137,6 +146,13 @@ const MyOfferCard = ({ product,refetch }: { product: GetProductRequestResponseDT
 	                        </div>
 	
 	                        <div className="flex flex-wrap items-center mt-4 gap-2">
+							<button
+								onClick={handleChat}
+								disabled={product.selected_offer_id === null}
+								className="bg-blue-500 text-white p-2 rounded"
+								>
+								Chat
+							</button>
 							{isEditingStatus ? (
 								<>
 								<button
