@@ -25,6 +25,7 @@ const ProductList = ({ products }: ProductListProps) => {
               <div>
                 <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
                 <p className="text-gray-600 text-sm">{product.desc}</p>
+                <p className="text-gray-600 text-sm">Status: {product.delivery_status}</p>
               </div>
             </div>
           </Link>
