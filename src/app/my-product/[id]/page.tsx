@@ -71,7 +71,7 @@ function Page(){
       };
 
     return <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
-	    <div className="bg-white rounded-lg shadow-md p-6 w-full md:w-1/2">
+	    <div className="bg-white rounded-lg shadow-md pt-8 p-6 w-full md:w-1/2">
             <Link             
                 href={`/my-product`}
                 passHref
@@ -79,23 +79,27 @@ function Page(){
             >
                 Back
             </Link>
-	        <h1 className="text-dark-primary font-medium pt-5">Product details</h1>
-            <div className="flex items-center mb-4">
-                <h2 className="text-2xl font-bold text-primary">{product?.['product-request']?.delivery_status}</h2>
+	        <div className="flex pt-5 justify-between items-center">
+                <div>
+                    <h1 className="text-dark-primary font-medium">Product details</h1>
+                    <div className="flex items-center mb-4">
+                        <h2 className="text-2xl font-bold text-primary">{product?.['product-request']?.delivery_status}</h2>
+                    </div>
+                </div>
+
+                <div className="flex mb-5">
+                    <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
+                        <img
+                            src={product?.['product-request']?.images[0]}
+                            alt={product?.['product-request']?.name}
+                            className="w-full h-full object-cover hover:scale-105 transition-transform"
+                        />
+                    </div>
+                </div>
             </div>
 	        <div>
             {isEditing ? (
             <div>
-              <div className="flex mb-5">
-                <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
-                  <img
-                    src={product?.['product-request']?.images[0]}
-                    alt={product?.['product-request']?.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform"
-                  />
-                </div>
-              </div>
-
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
                 <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center">
                     <div className="text-gray-500">Name</div>
@@ -160,16 +164,6 @@ function Page(){
             </div>
           ) : (
             <>
-              <div className="flex mb-6">
-                <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
-                  <img
-                    src={product?.['product-request']?.images[0]}
-                    alt={product?.['product-request']?.name}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform"
-                  />
-                </div>
-              </div>
-
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
                 <div className="grid grid-cols-[auto,2fr] gap-y-4 gap-x-8">
                     <div className="text-gray-500">Name</div>
@@ -243,11 +237,11 @@ function Page(){
                             </div>
 
                         <div className="grid grid-cols-2 gap-4 mt-4">
-                                <button className="py-3 px-4 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition-colors">
-                                    Cancel order
+                                <button className="bg-red-600 text-white py-3 px-4 border-2 border-red-700 rounded-md font-medium hover:bg-red-800 transition-colors">
+                                    Cancel Order
                                 </button>
                                 <button onClick={handleEditClick} className="py-3 px-4 border border-gray-300 rounded-md font-medium hover:bg-gray-50 transition-colors flex items-center justify-center">
-                                    Edit order
+                                    Edit Order
                                     <svg className="w-4 h-4 ml-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                                     </svg>
