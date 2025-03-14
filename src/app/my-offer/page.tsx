@@ -56,39 +56,44 @@ function Page() {
   return (
     <div className="px-8 bg-gray-50 rounded pt-[32px] pb-[32px]">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">My Offers</h1>
-      <div className="mb-4 flex">
+      <div className="mb-4 flex gap-2">
         <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === DeliveryStatus.Pending ? "bg-gray-200" : ""}`}
-            onClick={() => setSelectedStatus(DeliveryStatus.Pending)}
-          >
-            {counts[DeliveryStatus.Pending]} {"Pending"}
-        </button>
-        <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === DeliveryStatus.Purchased ? "bg-gray-200" : ""}`}
-            onClick={() => setSelectedStatus(DeliveryStatus.Purchased)}
-          >
-            {counts[DeliveryStatus.Purchased]} {"Purchased"}
-        </button>
-        <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === DeliveryStatus.PickedUp ? "bg-gray-200" : ""}`}
-            onClick={() => setSelectedStatus(DeliveryStatus.PickedUp)}
-          >
-            {counts[DeliveryStatus.PickedUp]} {"Picked Up"}
-        </button>
-        <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === DeliveryStatus.OutForDelivery ? "bg-gray-200" : ""}`}
-            onClick={() => setSelectedStatus(DeliveryStatus.OutForDelivery)}
-          >
-            {counts[DeliveryStatus.OutForDelivery]} {"Out For Delivery"}
-        </button>
-        <button
-            className={`w-full py-2 border-r border-gray-300 hover:bg-gray-200 ${selectedStatus === DeliveryStatus.Delivered ? "bg-gray-200" : ""}`}
-            onClick={() => setSelectedStatus(DeliveryStatus.Delivered)}
-          >
-            {counts[DeliveryStatus.Delivered]} {"Delivered"}
+          className={`w-1/5 py-2 text-white font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:bg-gray-200 hover:scale-105 ${selectedStatus === DeliveryStatus.Pending ? "bg-primary text-white" : "bg-secondary"}`}
+          onClick={() => setSelectedStatus(DeliveryStatus.Pending)}
+        >
+          {counts[DeliveryStatus.Pending]} {"Pending"}
         </button>
 
+        <button
+          className={`w-1/5 py-2 text-white font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:bg-gray-200 hover:scale-105 ${selectedStatus === DeliveryStatus.Purchased ? "bg-primary text-white" : "bg-secondary"}`}
+          onClick={() => setSelectedStatus(DeliveryStatus.Purchased)}
+        >
+          {counts[DeliveryStatus.Purchased]} {"Purchased"}
+        </button>
+
+        <button
+          className={`w-1/5 py-2 text-white font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:bg-gray-200 hover:scale-105 ${selectedStatus === DeliveryStatus.PickedUp ? "bg-primary text-white" : "bg-secondary"}`}
+          onClick={() => setSelectedStatus(DeliveryStatus.PickedUp)}
+        >
+          {counts[DeliveryStatus.PickedUp]} {"Picked Up"}
+        </button>
+
+        <button
+          className={`w-1/5 py-2 text-white font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:bg-gray-200 hover:scale-105 ${selectedStatus === DeliveryStatus.OutForDelivery ? "bg-primary text-white" : "bg-secondary"}`}
+          onClick={() => setSelectedStatus(DeliveryStatus.OutForDelivery)}
+        >
+          {counts[DeliveryStatus.OutForDelivery]} {"Out For Delivery"}
+        </button>
+
+        <button
+          className={`w-1/5 py-2 text-white font-medium rounded-lg shadow-md transition duration-300 ease-in-out transform hover:bg-gray-200 hover:scale-105 ${selectedStatus === DeliveryStatus.Delivered ? "bg-primary text-white" : "bg-secondary"}`}
+          onClick={() => setSelectedStatus(DeliveryStatus.Delivered)}
+        >
+          {counts[DeliveryStatus.Delivered]} {"Delivered"}
+        </button>
       </div>
+
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.map((product: GetProductRequestResponseDTO) => (
           <MyOfferCard key={product.id} product={product} refetch={refetchdata}/>

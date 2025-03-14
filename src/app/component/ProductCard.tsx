@@ -135,7 +135,7 @@ function ProductCard() {
           return (
             <div
               key={product.id}
-              className="border rounded-lg p-4 shadow-sm bg-white hover:shadow-lg transition-all duration-200 flex flex-col h-full"
+              className="border-2 border-dark-primary rounded-lg p-4 shadow-md bg-white hover:shadow-xl transition-all duration-200 flex flex-col h-full"
             >
               {/* Product Image - with error handling */}
               <div className="w-full h-48 flex items-center justify-center bg-[#00000000]">
@@ -217,10 +217,8 @@ function ProductCard() {
       ) : (
         allProducts.length > 0 && (
           <div className="text-center bg-gray-50 px-6 py-4 rounded-lg">
-            <p className="text-gray-500">You've seen all products</p>
-            <p className="text-gray-400 text-sm mt-1">
-              No more items to display
-            </p>
+            <p className="text-gray-500">You&#39;ve seen all products</p>
+            <p className="text-gray-400 text-sm mt-1">No more items to display</p>
           </div>
         )
       )}

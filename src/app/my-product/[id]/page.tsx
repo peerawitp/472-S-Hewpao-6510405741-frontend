@@ -1,6 +1,5 @@
 // pages/edit-product/[id].tsx
 "use client";
-import Image from "next/image";
 import React, { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -9,6 +8,7 @@ import {
   useCancelProductRequest,
 } from "@/api/productRequest/useProductRequest";
 import Link from "next/link";
+import Image from "next/image";
 import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
@@ -55,7 +55,14 @@ function Page() {
   }, [productData]);
 
   if (loading) {
-    return <div>..Loading</div>;
+    return (
+        <div className="flex justify-center items-center min-h-[300px]">
+            <div className="animate-pulse flex flex-col items-center">
+                <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+                <p className="mt-2 text-gray-600">Loading product...</p>
+            </div>
+        </div>
+    );
   }
 
   const handleEditClick = () => {
@@ -149,7 +156,9 @@ function Page() {
             <button
               onClick={handleChat}
               disabled={product.selected_offer_id === null}
-              className="bg-blue-500 text-white p-2 rounded"
+              className={`px-3 py-1 rounded-lg font-semibold transition duration-200
+                ${product.selected_offer_id === null ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700 text-white"}
+              `}
             >
               Chat
             </button>
@@ -171,16 +180,16 @@ function Page() {
               </div>
 
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
-                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
+                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center">
                   <div className="text-gray-500">Name</div>
                   <input
                     type="text"
                     value={editedName}
                     onChange={(e) => setEditedName(e.target.value)}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full rounded-lg"
                     placeholder="Name"
                   />
-                  <div className="text-gray-500">Description</div>
+                    <div className="text-gray-500 self-start">Description</div>
                   <textarea
                     value={editedDesc}
                     onChange={(e) => setEditedDesc(e.target.value)}
@@ -193,7 +202,7 @@ function Page() {
                     name="category"
                     value={editedCategory}
                     onChange={(e) => setEditedCategory(e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
                     required
                   >
                     <option value="">Select a category</option>
@@ -235,19 +244,9 @@ function Page() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2">
-                <button
-                  onClick={handleSaveClick}
-                  className="bg-blue-500 text-white p-2 rounded"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleCancelClick}
-                  className="bg-gray-300 p-2 rounded"
-                >
-                  Cancel
-                </button>
+              <div className="pt-5 grid grid-cols-2 gap-5">
+                <button onClick={handleSaveClick} className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-dark-primary ease-out duration-300">Save</button>
+                <button onClick={handleCancelClick} className="bg-gray-300 px-3 py-2 rounded-lg">Cancel</button>
               </div>
             </div>
           ) : (
