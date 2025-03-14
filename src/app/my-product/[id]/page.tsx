@@ -97,15 +97,26 @@ function Page() {
 
   return (
     <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
-      <div className="bg-white rounded-lg shadow-md p-6 w-full md:w-1/2">
-        <Link href={`/my-product`} passHref>
+      <div className="flex flex-col gap-4 bg-white rounded-lg shadow-md p-6 w-full md:w-1/2">
+        <Link
+          className="border p-2 rounded-md w-fit"
+          href={`/my-product`}
+          passHref
+        >
           Back
         </Link>
-        <h1 className="text-primary-500 font-medium">Product details</h1>
-        <div className="flex items-center mb-4">
-          <h2 className="text-2xl font-bold">
-            {product?.["product-request"]?.delivery_status}
-          </h2>
+        <div>
+          <h1 className="text-primary-500 font-bold text-xl">
+            Product details
+          </h1>
+          <div className="flex items-center mb-4">
+            <h2 className="text-md font-bold">
+              Status:{" "}
+              <span className="text-blue-600">
+                {product?.["product-request"]?.delivery_status}
+              </span>
+            </h2>
+          </div>
         </div>
         <div>
           {isEditing ? (
@@ -225,27 +236,27 @@ function Page() {
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
                 <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
                   <div className="text-gray-500">Name</div>
-                  <div className="font-medium">
+                  <div className="font-medium text-right">
                     {product?.["product-request"]?.name}
                   </div>
 
                   <div className="text-gray-500">Description</div>
-                  <div className="font-medium">
+                  <div className="font-medium text-right">
                     {product?.["product-request"]?.desc}
                   </div>
 
                   <div className="text-gray-500">Category</div>
-                  <div className="font-medium">
+                  <div className="font-medium text-right">
                     {product?.["product-request"]?.category}
                   </div>
 
                   <div className="text-gray-500">Deliver to</div>
-                  <div className="font-medium">
+                  <div className="font-medium text-right">
                     {product?.["product-request"]?.deliver_to}
                   </div>
 
                   <div className="text-gray-500">From</div>
-                  <div className="font-medium">
+                  <div className="font-medium text-right">
                     {product?.["product-request"]?.deliver_from}
                   </div>
 
