@@ -11,7 +11,7 @@ function LandingPage() {
   return (
     <div className="bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gray-900 text-white">
+      <section className="relative bg-primary text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-6">
