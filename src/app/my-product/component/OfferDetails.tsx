@@ -10,12 +10,13 @@ interface OfferDetailsProps {
 
 const OfferDetails: React.FC<OfferDetailsProps> = ({ id }) => {
   const traveler = useGetOfferDetailByOfferID(id);
-  const { data: product, isLoading: loading } = useGetProductRequestByID(
+  const { data: productData, isLoading: loading } = useGetProductRequestByID(
     traveler.data?.product_request_id ?? 0,
   );
   const useUpdateProduct = useUpdateProductRequest(
     traveler.data?.product_request_id ?? 0,
   );
+  const product = productData?.["product-request"];
 
   if (loading) {
     return <div> Loading... </div>;
@@ -23,15 +24,16 @@ const OfferDetails: React.FC<OfferDetailsProps> = ({ id }) => {
   const handleSelectOffer = () => {
     useUpdateProduct.mutate(
       {
-        name: product!["product-request"].name,
-        desc: product!["product-request"].desc,
-        quantity: product!["product-request"].quantity,
-        category: product!["product-request"].category,
+        name: product!.name,
+        desc: product!.desc,
+        quantity: product!.quantity,
+        category: product!.category,
         selected_offer_id: id,
       },
       {
         onSuccess: () => {
           alert("success");
+          window.location.reload();
         },
       },
     );
