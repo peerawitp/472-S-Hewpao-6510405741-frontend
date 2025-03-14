@@ -106,6 +106,23 @@ const updateProductRequest = async (
   return data;
 };
 
+const updateProductRequestStatus = async (
+  req: UpdateProductRequestStatusDTO, 
+  id: number,
+) => {
+  const session = await getSession();
+  const { data } = await axiosInstance.put(
+    `/product-requests/status/${id}`,
+    req,
+    {
+      headers: {
+        Authorization: `Bearer ${session?.user?.access_token}`,
+      },
+    },
+  );
+  return data;
+};
+
 const cancelProductRequest = async (
   req: UpdateProductRequestStatusDTO,
   id: number,
@@ -122,6 +139,18 @@ const cancelProductRequest = async (
   );
   return data;
 };
+
+const useUpdateProductRequestStatus = (id: number) => {
+  const queryClient = useQueryClient(); 
+  return useMutation({
+      mutationFn: async (req : UpdateProductRequestStatusDTO) =>
+        updateProductRequestStatus(req, id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["productRquests", id] });
+      },
+  });
+};
+
 
 const useCancelProductRequest = (id: number) => {
   return useMutation({
@@ -186,5 +215,6 @@ export {
   useGetBuyerProductRequests,
   useGetTravelerProductRequests,
   useUpdateProductRequest,
+  useUpdateProductRequestStatus,
   useCancelProductRequest,
 };
