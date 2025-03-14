@@ -205,7 +205,7 @@ function ProductCard() {
       ) : (
         allProducts.length > 0 && (
           <div className="text-center bg-gray-50 px-6 py-4 rounded-lg">
-            <p className="text-gray-500">You've seen all products</p>
+            <p className="text-gray-500">You&#39;ve seen all products</p>
             <p className="text-gray-400 text-sm mt-1">No more items to display</p>
           </div>
         )

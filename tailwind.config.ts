@@ -16,7 +16,6 @@ export default {
         tertiary: "#DAD2FF",
         'dark-primary': "#221D57",
         accent: "#FFF2AF"
-
       },
     },
   },
