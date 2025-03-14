@@ -1,5 +1,5 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import ProgressIndicator from "../../component/ProgressIndicator";
 import ImageUpload from "../../component/ImageUpload";
 import { useCreateProductRequest } from "@/api/productRequest/useProductRequest";
@@ -17,9 +17,23 @@ interface OrderRequest {
   to: string;
 }
 
+interface FormErrors {
+  name?: string;
+  desc?: string;
+  images?: string;
+  budget?: string;
+  category?: string;
+  quantity?: string;
+  from?: string;
+  to?: string;
+}
+
 function CreateOrderPage() {
   const [step, setStep] = useState(1);
   const customSteps = ["Product details", "Delivery details", "Summary"];
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const createProductRequest = useCreateProductRequest();
 
@@ -39,8 +53,88 @@ function CreateOrderPage() {
 
   const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
 
+  // Validate form data
+  const validateForm = (step: number) => {
+    const newErrors: FormErrors = {};
+    let isValid = true;
+
+    if (step === 1) {
+      // Product details validation
+      if (!orderData.name || orderData.name.trim() === "") {
+        newErrors.name = "Product name is required";
+        isValid = false;
+      } else if (orderData.name.length < 3) {
+        newErrors.name = "Product name must be at least 3 characters";
+        isValid = false;
+      }
+
+      if (!orderData.category) {
+        newErrors.category = "Please select a category";
+        isValid = false;
+      }
+
+      if (!orderData.desc || orderData.desc.trim() === "") {
+        newErrors.desc = "Product description is required";
+        isValid = false;
+      } else if (orderData.desc.length < 10) {
+        newErrors.desc = "Description must be at least 10 characters";
+        isValid = false;
+      }
+
+      if (orderData.images.length === 0) {
+        newErrors.images = "At least one image is required";
+        isValid = false;
+      }
+
+      if (!orderData.budget || orderData.budget <= 0) {
+        newErrors.budget = "Price must be greater than 0";
+        isValid = false;
+      }
+
+      if (!orderData.quantity || orderData.quantity < 1) {
+        newErrors.quantity = "Quantity must be at least 1";
+        isValid = false;
+      }
+    }
+
+    if (step === 2) {
+      // Delivery details validation
+      if (!orderData.from || orderData.from.trim() === "") {
+        newErrors.from = "Delivery from location is required";
+        isValid = false;
+      }
+
+      if (!orderData.to || orderData.to.trim() === "") {
+        newErrors.to = "Delivery to location is required";
+        isValid = false;
+      }
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleNext = () => {
-    if (step < customSteps.length) setStep(step + 1);
+    const isValid = validateForm(step);
+    
+    if (isValid) {
+      if (step < customSteps.length) setStep(step + 1);
+    } else {
+      // Mark all fields as touched for this step to show all errors
+      const newTouched = { ...touched };
+      if (step === 1) {
+        newTouched.name = true;
+        newTouched.category = true;
+        newTouched.desc = true;
+        newTouched.images = true;
+        newTouched.budget = true;
+        newTouched.quantity = true;
+      } else if (step === 2) {
+        newTouched.from = true;
+        newTouched.to = true;
+      }
+      setTouched(newTouched);
+    }
   };
 
   const handlePrevious = () => {
@@ -48,19 +142,49 @@ function CreateOrderPage() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    // Add API call to submit order here
-    console.log("Submitting order:", orderData);
-
-    await createProductRequest.mutateAsync(orderData, {
-      onSuccess: () => {
-        alert("Order submitted successfully!");
-      },
-      onError: (error) => {
-        alert(error.message);
-      },
-    });
-    // TODO: Change this to redirect to list of my product request page or something
-    router.push("/");
+    e.preventDefault();
+    
+    // Prevent multiple submissions
+    if (isSubmitting) return;
+    
+    // Validate all steps before submitting
+    const isStep1Valid = validateForm(1);
+    if (!isStep1Valid) {
+      setStep(1);
+      // Mark all step 1 fields as touched
+      setTouched({
+        name: true,
+        category: true,
+        desc: true,
+        images: true,
+        budget: true,
+        quantity: true
+      });
+      return;
+    }
+    
+    const isStep2Valid = validateForm(2);
+    if (!isStep2Valid) {
+      setStep(2);
+      // Mark all step 2 fields as touched
+      setTouched(prev => ({
+        ...prev,
+        from: true,
+        to: true
+      }));
+      return;
+    }
+    
+    try {
+      setIsSubmitting(true);
+      await createProductRequest.mutateAsync(orderData);
+      alert("Order submitted successfully!");
+      router.push("/");
+    } catch (error: any) {
+      alert(error.message || "Failed to submit order. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -72,28 +196,62 @@ function CreateOrderPage() {
     const value = e.target.value;
     const checked =
       type === "checkbox" ? (e.target as HTMLInputElement).checked : false;
+    
     setOrderData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+    
+    // Mark field as touched when changed
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
   };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name } = e.target;
+    
+    // Mark field as touched when blurred
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+  };
+
+  // Re-validate on data change
+  useEffect(() => {
+    validateForm(step);
+  }, [orderData, step]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setOrderData((prev) => ({
       ...prev,
       images: [...prev.images, ...acceptedFiles],
     }));
+    
+    // Mark images as touched
+    setTouched(prev => ({
+      ...prev,
+      images: true
+    }));
   }, []);
 
   const handleImagesChange = (newImages: File[]) => {
     setOrderData((prev) => ({ ...prev, images: newImages }));
+    
+    // Mark images as touched
+    setTouched(prev => ({
+      ...prev,
+      images: true
+    }));
   };
 
   return (
     <div className="min-h-screen p-6 flex justify-center items-start">
       <div className="max-w-2xl w-full bg-[#FFFFFF] rounded-lg p-[16px] block">
-        <div className=" mb-6">
-          {/* แสดง Progress Bar */}
+        <div className="mb-6">
+          {/* Progress Bar */}
           <ProgressIndicator step={step} steps={customSteps} />
 
           {/* Step Header */}
@@ -104,33 +262,46 @@ function CreateOrderPage() {
           </h1>
         </div>
 
-        <form className="space-y-6">
-          {/* ✅ Step 1: Product Details */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Step 1: Product Details */}
           {step === 1 && (
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Product name
+                  Product name <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="name"
                   value={orderData.name}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  onBlur={handleBlur}
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.name && errors.name 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
                 />
+                {touched.name && errors.name && (
+                  <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Category
+                  Category <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="category"
                   value={orderData.category}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  onBlur={handleBlur}
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.category && errors.category 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
                 >
                   <option value="">Select a category</option>
@@ -140,36 +311,55 @@ function CreateOrderPage() {
                     </option>
                   ))}
                 </select>
+                {touched.category && errors.category && (
+                  <p className="mt-1 text-sm text-red-500">{errors.category}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Product details
+                  Product details <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="desc"
                   name="desc"
                   value={orderData.desc}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   rows={4}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.desc && errors.desc 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter product details like model, size, color, etc."
                 />
+                {touched.desc && errors.desc && (
+                  <p className="mt-1 text-sm text-red-500">{errors.desc}</p>
+                )}
               </div>
 
-              <ImageUpload
-                maxImages={15}
-                images={orderData.images}
-                onImagesChange={handleImagesChange}
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Product images <span className="text-red-500">*</span>
+                </label>
+                <ImageUpload
+                  maxImages={15}
+                  images={orderData.images}
+                  onImagesChange={handleImagesChange}
+                />
+                {touched.images && errors.images && (
+                  <p className="mt-1 text-sm text-red-500">{errors.images}</p>
+                )}
+              </div>
 
               <div>
                 <label
                   htmlFor="budget"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Price on website (THB)
+                  Price on website (THB) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -177,16 +367,23 @@ function CreateOrderPage() {
                   name="budget"
                   value={orderData.budget}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   min="0"
                   step="100"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.budget && errors.budget 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter your budget"
                 />
-
+                {touched.budget && errors.budget && (
+                  <p className="mt-1 text-sm text-red-500">{errors.budget}</p>
+                )}
                 <label
                   htmlFor="budget"
-                  className="block text-sm font-medium text-[#696969]"
+                  className="block text-sm font-medium text-[#696969] mt-1"
                 >
                   Confirm the retail price of your item (does not include cost
                   of delivery).
@@ -199,7 +396,7 @@ function CreateOrderPage() {
                   htmlFor="quantity"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Quantity
+                  Quantity <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -207,15 +404,22 @@ function CreateOrderPage() {
                   name="quantity"
                   value={orderData.quantity}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   min="1"
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.quantity && errors.quantity 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter quantity"
                 />
-
+                {touched.quantity && errors.quantity && (
+                  <p className="mt-1 text-sm text-red-500">{errors.quantity}</p>
+                )}
                 <label
                   htmlFor="quantity"
-                  className="block text-sm font-medium border-[#00000000] text-[#696969]"
+                  className="block text-sm font-medium border-[#00000000] text-[#696969] mt-1"
                 >
                   How many of this item would you like to purchase?
                 </label>
@@ -233,7 +437,7 @@ function CreateOrderPage() {
                 />
 
                 <label
-                  htmlFor="verifyProductService"
+                  htmlFor="check_service"
                   className="ml-2 text-sm text-gray-700"
                 >
                   200 THB for Verify Product Service (Optional)
@@ -242,40 +446,58 @@ function CreateOrderPage() {
             </>
           )}
 
-          {/* ✅ Step 2: Delivery Details */}
+          {/* Step 2: Delivery Details */}
           {step === 2 && (
             <>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Delivery from
+                  Delivery from <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="from"
                   value={orderData.from}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  onBlur={handleBlur}
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.from && errors.from 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
+                  placeholder="Country or city of origin"
                 />
+                {touched.from && errors.from && (
+                  <p className="mt-1 text-sm text-red-500">{errors.from}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700">
-                  Delivery to
+                  Delivery to <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
                   name="to"
                   value={orderData.to}
                   onChange={handleChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                  onBlur={handleBlur}
+                  className={`mt-1 block w-full rounded-md border ${
+                    touched.to && errors.to 
+                      ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } px-3 py-2 text-sm`}
                   required
+                  placeholder="Destination country or city"
                 />
+                {touched.to && errors.to && (
+                  <p className="mt-1 text-sm text-red-500">{errors.to}</p>
+                )}
               </div>
             </>
           )}
 
-          {/* ✅ Step 3: Summary */}
+          {/* Step 3: Summary */}
           {step === 3 && (
             <>
               <h2 className="text-xl font-semibold text-gray-800">
@@ -300,46 +522,93 @@ function CreateOrderPage() {
                   ))}
                 </div>
               </div>
-              <p>
-                <strong>Product:</strong> {orderData.name} <br />
-                <strong>Category:</strong> {orderData.category} <br />
-                <strong>Description:</strong> {orderData.desc} <br />
-                <strong>Budget:</strong> {orderData.budget} THB <br />
-                <strong>Quantity:</strong> {orderData.quantity} <br />
-                <strong>Verify Product Service:</strong>{" "}
-                {orderData.check_service ? "Yes" : "No"} <br />
-                <strong>Deliver from:</strong> {orderData.from} <br />
-                <strong>Deliver to:</strong> {orderData.to} <br />
-              </p>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  Order Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Product:</span> {orderData.name}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Category:</span> {orderData.category}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Budget:</span> {orderData.budget} THB
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Quantity:</span> {orderData.quantity}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Deliver from:</span> {orderData.from}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Deliver to:</span> {orderData.to}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      <span className="font-semibold">Verify Product Service:</span>{" "}
+                      {orderData.check_service ? "Yes (+200 THB)" : "No"}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">Product Description:</span>
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">
+                    {orderData.desc}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-gray-300">
+                  <p className="text-lg font-bold text-gray-900">
+                    Total Price: {orderData.budget * orderData.quantity + (orderData.check_service ? 200 : 0)} THB
+                  </p>
+                </div>
+              </div>
             </>
           )}
+          
+          {/* Navigation Buttons */}
+          <div className="flex justify-between mt-8">
+            {step > 1 && (
+              <button
+                type="button"
+                onClick={handlePrevious}
+                className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+              >
+                Previous
+              </button>
+            )}
+            {step < 3 ? (
+              <button
+                type="button"
+                onClick={handleNext}
+                className="ml-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-dark-primary transition-colors"
+              >
+                Next
+              </button>
+            ) : (
+              <button
+                type="button" // Changed from type="submit" to type="button"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                className={`ml-auto ${isSubmitting ? 'bg-green-400' : 'bg-green-500 hover:bg-green-600'} text-white px-4 py-2 rounded-lg transition-colors flex items-center`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin mr-2"></div>
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Order"
+                )}
+              </button>
+            )}
+          </div>
         </form>
-        {/* 🔘 Navigation Buttons */}
-        <div className="flex justify-between mt-4">
-          {step > 1 && (
-            <button
-              onClick={handlePrevious}
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-400"
-            >
-              Previous
-            </button>
-          )}
-          {step < 3 ? (
-            <button
-              onClick={handleNext}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              onClick={handleSubmit}
-              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
-            >
-              Submit Order
-            </button>
-          )}
-        </div>
       </div>
     </div>
   );

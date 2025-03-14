@@ -233,7 +233,7 @@ export default function DateSelector({
               minDate={minDate}
               maxDate={maxDate || undefined}
               dateFormat="MMM d, yyyy"
-              className="border p-2 pl-9 w-full rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="border p-2 pl-9 w-full rounded focus:ring-2 focus:ring-primary focus:border-primary"
               placeholderText="Select return date"
               dayClassName={(date) => {
                 if (!date) return "";
@@ -244,8 +244,8 @@ export default function DateSelector({
                   date.getMonth() === returnDate.getMonth() &&
                   date.getFullYear() === returnDate.getFullYear();
 
-                if (isSelected) return "bg-blue-500 text-white rounded-full";
-                if (isWeekend(date)) return "bg-blue-50 rounded-full";
+                if (isSelected) return "bg-primary text-white rounded-full";
+                if (isWeekend(date)) return "bg-secondary rounded-full";
 
                 return "";
               }}
@@ -288,7 +288,7 @@ export default function DateSelector({
 
         {/* Selected date display - always show this section */}
         <div
-          className={`p-3 rounded-lg flex items-center justify-center ${returnDate ? "bg-blue-50" : "bg-gray-50"}`}
+          className={`p-3 rounded-lg flex items-center justify-center ${returnDate ? "bg-tertiary" : "bg-gray-50"}`}
         >
           <div className="text-sm">
             {returnDate ? (
@@ -313,8 +313,8 @@ export default function DateSelector({
             disabled={isSubmitting || !isValid}
             className={`px-4 py-3 rounded flex-1 transition-colors ${
               isValid
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-blue-300 text-white cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-dark-primary"
+                : "bg-tertiary text-white cursor-not-allowed"
             }`}
           >
             {isSubmitting ? (

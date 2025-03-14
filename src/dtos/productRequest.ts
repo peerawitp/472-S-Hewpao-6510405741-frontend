@@ -1,8 +1,13 @@
 import { ResponseOffer } from "./Offer";
 
+export interface ProductRequestListResponse {
+  message: string;
+  "product-requests": GetProductRequestResponseDTO[];
+}
+
 export interface ProductRequestResponse {
   message: string;
-  "product-request": GetProductRequestResponseDTO[];
+  "product-request": GetProductRequestResponseDTO;
 }
 
 export interface GetProductRequestResponseDTO {
@@ -37,7 +42,7 @@ export interface GetPaginatedProductRequestRespnoseDTO<T> {
   totalPages: number;
 }
 
-export interface UpdateProductRequestDTO{
+export interface UpdateProductRequestDTO {
   name: string;
   desc: string;
   quantity: number;
@@ -45,3 +50,7 @@ export interface UpdateProductRequestDTO{
 
   selected_offer_id: number;
 }
+export interface UpdateProductRequestStatusDTO{
+  delivery_status:string;
+  notify_provider:string;
+} 

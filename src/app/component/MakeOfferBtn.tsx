@@ -99,7 +99,7 @@ const MakeOfferButton = ({ productRequestID }: MakeOfferButtonProps) => {
     <div className="w-full">
       <button
         onClick={openPopup}
-        className="bg-blue-500 text-white w-full py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium"
+        className="bg-primary text-white w-full py-3 rounded-lg hover:bg-dark-primary transition-colors font-medium"
       >
         Make an Offer
       </button>
