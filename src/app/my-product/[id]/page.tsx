@@ -255,6 +255,11 @@ function Page() {
                   <div className="font-medium text-right">
                     {product?.["product-request"]?.budget}
                   </div>
+
+                  <div className="text-gray-500">Selected Offer ID</div>
+                  <div className="font-medium text-right">
+                    {product?.["product-request"]?.selected_offer_id}
+                  </div>
                 </div>
               </div>
 
@@ -340,4 +345,3 @@ function Page() {
 }
 
 export default Page;
-
