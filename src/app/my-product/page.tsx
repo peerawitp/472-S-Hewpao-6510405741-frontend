@@ -52,6 +52,7 @@ function Page() {
         <Link
           href="/my-product/create-order"
           className="text-white bg-primary px-6 py-3 rounded-lg font-medium text-lg transition duration-200 hover:bg-dark-primary shadow-md"
+          className="text-white bg-primary px-6 py-3 rounded-lg font-medium text-lg transition duration-200 hover:bg-dark-primary shadow-md"
         >
           + Create Order
         </Link>

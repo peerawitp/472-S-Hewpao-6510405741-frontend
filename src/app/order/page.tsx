@@ -20,12 +20,12 @@ function LandingPage() {
             <p className="text-xl text-gray-300 mb-8">
               Connect with travelers who can bring your desired items from anywhere. Fast, reliable, and hassle-free.
             </p>
-      
+
           </div>
         </div>
       </section>
 
-      
+
 
       {/* How It Works Section */}
       <section className="py-16 bg-white">

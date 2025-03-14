@@ -47,7 +47,7 @@ export default function ChatPage() {
                         <ChatMessage key={msg.ID} message={msg} self={msg.UserID === currentUserId} />
                     ))
                 ) : (
-                    <p className="text-center text-gray-400">No messages yet.</p>
+                    <p className="text-center text-gray-400">No messages yet.</p> 
                 )}
             </div>
             
