@@ -11,7 +11,7 @@ export default function LandingPageBody() {
   return (
     <main className="flex-grow gap-2">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#493D9E] to-[#6e61c7] text-white pt-24 pb-16 rounded-xl">
+      <section className="bg-gradient-to-r from-[#493D9E] to-[#6e61c7] text-white pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-8 md:mb-0">
@@ -68,7 +68,7 @@ export default function LandingPageBody() {
                 )}
               </div>
             </div>
-            
+
             <div className="md:w-1/2">
               <div className="flex items-center justify-center h-64 md:h-96 w-full">
 
@@ -86,7 +86,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* Verification Service Section */}
-      <section className="py-16 bg-gray-50 rounded-xl mt-4">
+      <section className="py-16 bg-gray-50 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Product Verification Service</h2>
@@ -145,7 +145,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-gray-50 rounded-xl mt-4">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Benefits of Using Hewpao</h2>
@@ -191,7 +191,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-[#493D9E] text-white rounded-xl mt-4">
+      <section className="py-16 bg-[#493D9E] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">Join our community of travelers and buyers connecting across the globe.</p>
