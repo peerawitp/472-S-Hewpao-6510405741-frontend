@@ -1,11 +1,9 @@
 // pages/edit-product/[id].tsx
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useGetProductRequestByID, useUpdateProductRequest } from '@/api/productRequest/useProductRequest';
-import Link from 'next/link';
-import { useGetOfferDetailByOfferID } from '@/api/offers/useOffer';
-import { Offer } from '@/interfaces/Offer';
+import Link from 'next/link'
 import { ResponseOffer } from '@/dtos/Offer';
 import OfferDetails from '../component/OfferDetails';
 
@@ -34,14 +32,21 @@ function Page(){
                 setEditedQuantity(product?.['product-request']?.quantity);
             }
     },[product])
-    
-    if(loading){
-        return <div>..Loading</div>;
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[300px]">
+                <div className="animate-pulse flex flex-col items-center">
+                    <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin"></div>
+                    <p className="mt-2 text-gray-600">Loading products...</p>
+                </div>
+            </div>
+        );
     }
 
     const handleEditClick = () => {
         setIsEditing(true);
-      };
+    };
       
     const handleSaveClick = () => {
         useUpdateProduct.mutate({
@@ -70,17 +75,18 @@ function Page(){
             <Link             
                 href={`/my-product`}
                 passHref
+                className="bg-gray-300 px-3 py-2 rounded-lg"
             >
                 Back
             </Link>
-	        <h1 className="text-primary-500 font-medium">Product details</h1>
+	        <h1 className="text-dark-primary font-medium pt-5">Product details</h1>
             <div className="flex items-center mb-4">
-                <h2 className="text-2xl font-bold">{product?.['product-request']?.delivery_status}</h2>
+                <h2 className="text-2xl font-bold text-primary">{product?.['product-request']?.delivery_status}</h2>
             </div>
 	        <div>
             {isEditing ? (
             <div>
-              <div className="flex mb-6">
+              <div className="flex mb-5">
                 <div className="mr-4 border border-gray-200 rounded-md overflow-hidden w-24 h-24 flex-shrink-0">
                   <img
                     src={product?.['product-request']?.images[0]}
@@ -91,20 +97,20 @@ function Page(){
               </div>
 
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
-                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
+                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8 items-center">
                     <div className="text-gray-500">Name</div>
                     <input
                         type="text"
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className="border p-2 w-full"
+                        className="border p-2 w-full rounded-lg"
                         placeholder="Name"
                     />
-                  <div className="text-gray-500">Description</div>
+                  <div className="text-gray-500 self-start">Description</div>
                   <textarea
                     value={editedDesc}
                     onChange={(e) => setEditedDesc(e.target.value)}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full rounded-lg"
                     placeholder="Description"
                   />
 
@@ -113,7 +119,7 @@ function Page(){
                         name="category"
                         value={editedCategory}
                         onChange={(e) => setEditedCategory(e.target.value)}
-                        className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
                         required
                         >
                         <option value="">Select a category</option>
@@ -125,17 +131,17 @@ function Page(){
                     </select>
 
                   <div className="text-gray-500">Deliver to</div>
-                  <div className="font-medium">{product?.['product-request']?.deliver_to}</div>
+                  <div className="font-medium text-primary">{product?.['product-request']?.deliver_to}</div>
 
                   <div className="text-gray-500">From</div>
-                  <div className="font-medium">{product?.['product-request']?.deliver_from}</div>
+                  <div className="font-medium text-primary">{product?.['product-request']?.deliver_from}</div>
 
                   <div className="text-gray-500">Quantity</div>
                   <input
                     type="number"
                     value={editedQuantity}
                     onChange={(e) => setEditedQuantity(Number(e.target.value))}
-                    className="border p-2 w-full"
+                    className="border p-2 w-full rounded-lg"
                     placeholder="Quantity"
                   />
 
@@ -147,9 +153,9 @@ function Page(){
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2">
-                <button onClick={handleSaveClick} className="bg-blue-500 text-white p-2 rounded">Save</button>
-                <button onClick={handleCancelClick} className="bg-gray-300 p-2 rounded">Cancel</button>
+              <div className="pt-5 flex justify-end gap-5">
+                <button onClick={handleSaveClick} className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-dark-primary ease-out duration-300">Save</button>
+                <button onClick={handleCancelClick} className="bg-gray-300 px-3 py-2 rounded-lg">Cancel</button>
               </div>
             </div>
           ) : (
@@ -165,7 +171,7 @@ function Page(){
               </div>
 
               <div className="mt-4 bg-gray-50 p-4 rounded-md">
-                <div className="grid grid-cols-[auto,1fr] gap-y-4 gap-x-8">
+                <div className="grid grid-cols-[auto,2fr] gap-y-4 gap-x-8">
                     <div className="text-gray-500">Name</div>
                     <div className="font-medium">{product?.['product-request']?.name}</div>
 
@@ -182,13 +188,13 @@ function Page(){
                     <div className="font-medium">{product?.['product-request']?.deliver_from}</div>
 
                     <div className="text-gray-500">Quantity</div>
-                    <div className="font-medium text-right">{product?.['product-request']?.quantity}</div>
+                    <div className="font-medium">{product?.['product-request']?.quantity}</div>
 
                     <div className="text-gray-500">Order number</div>
-                    <div className="font-medium text-right">{product?.['product-request']?.id}</div>
+                    <div className="font-medium">{product?.['product-request']?.id}</div>
 
                     <div className="text-gray-500">Budget</div>
-                    <div className="font-medium text-right">{product?.['product-request']?.budget}</div>
+                    <div className="font-medium">{product?.['product-request']?.budget}</div>
                 </div>
               </div>
 
