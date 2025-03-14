@@ -586,7 +586,7 @@ function CreateOrderPage() {
               <button
                 type="button"
                 onClick={handleNext}
-                className="ml-auto bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+                className="ml-auto bg-primary text-white px-4 py-2 rounded-lg hover:bg-dark-primary transition-colors"
               >
                 Next
               </button>
