@@ -1,8 +1,13 @@
+"use client"
 // components/LandingPageBody.jsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from "next-auth/react";
+import { se } from 'date-fns/locale';
 
 export default function LandingPageBody() {
+  const session = useSession();
+
   return (
     <main className="flex-grow gap-2">
       {/* Hero Section */}
@@ -13,15 +18,62 @@ export default function LandingPageBody() {
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Connecting Travelers with Buyers</h1>
               <p className="text-xl mb-6">Hewpao is your trusted middleman, bringing hard-to-find products from around the world to your doorstep.</p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/signup" className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100">I'm a Traveler</Link>
-                <Link href="/signup" className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]">I'm a Buyer</Link>
+                {session.data && session.data.user ? (
+                  session.data.user.is_verified ? (
+                    <>
+                      <Link
+                        href="/order"
+                        className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                      >
+                        I'm a Buyer
+                      </Link>
+                      <Link
+                        href="/product-requests"
+                        className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                      >
+                        I'm a Traveler
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/order"
+                        className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                      >
+                        I'm a Buyer
+                      </Link>
+                      <Link
+                        href="/verification"
+                        className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                      >
+                        I'm a Traveler
+                      </Link>
+                    </>
+                  )
+                ) : (
+                  <>
+                    <Link
+                      href="/signup"
+                      className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                    >
+                      I'm a Buyer
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                    >
+                      I'm a Traveler
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
+            
             <div className="md:w-1/2">
               <div className="flex items-center justify-center h-64 md:h-96 w-full">
 
-                <Image 
-                  src="/images/HP5.png" 
+                <Image
+                  src="/images/HP5.png"
                   alt="Hewpao service illustration"
                   width={300}
                   height={300}

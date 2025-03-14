@@ -206,7 +206,7 @@ function ProductCard() {
           >
             {isLoadingMore ? (
               <div className="flex items-center space-x-2">
-                <div className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin"></div>
+                <div className="h-5 w-5 rounded-full border-2 border-white border-t-transparent animate-spin bg:primary"></div>
                 <span>Loading...</span>
               </div>
             ) : (
