@@ -164,7 +164,7 @@ function ProductCard() {
                 </div>
                 <p className="text-gray-600 mb-2">
                   Retailer price:{" "}
-                  <span className="font-bold text-gray-900">
+                  <span className="font-bold text-primary">
                     {typeof product.budget === 'number' ? `${product.budget} THB` : "Price not set"}
                   </span>
                 </p>
