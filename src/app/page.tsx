@@ -1,27 +1,79 @@
+"use client"
 // components/LandingPageBody.jsx
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from "next-auth/react";
+import { se } from 'date-fns/locale';
 
 export default function LandingPageBody() {
+  const session = useSession();
+
   return (
     <main className="flex-grow gap-2">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-[#493D9E] to-[#6e61c7] text-white pt-24 pb-16 rounded-xl">
+      <section className="bg-gradient-to-r from-[#493D9E] to-[#6e61c7] text-white pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-8 md:mb-0">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">Connecting Travelers with Buyers</h1>
               <p className="text-xl mb-6">Hewpao is your trusted middleman, bringing hard-to-find products from around the world to your doorstep.</p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/signup" className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100">I'm a Traveler</Link>
-                <Link href="/signup" className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]">I'm a Buyer</Link>
+                {session.data && session.data.user ? (
+                  session.data.user.is_verified ? (
+                    <>
+                      <Link
+                        href="/order"
+                        className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                      >
+                        I'm a Buyer
+                      </Link>
+                      <Link
+                        href="/product-requests"
+                        className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                      >
+                        I'm a Traveler
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/order"
+                        className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                      >
+                        I'm a Buyer
+                      </Link>
+                      <Link
+                        href="/verification"
+                        className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                      >
+                        I'm a Traveler
+                      </Link>
+                    </>
+                  )
+                ) : (
+                  <>
+                    <Link
+                      href="/signup"
+                      className="px-6 py-3 rounded-lg bg-white text-[#493D9E] font-medium text-center hover:bg-gray-100"
+                    >
+                      I'm a Buyer
+                    </Link>
+                    <Link
+                      href="/signup"
+                      className="px-6 py-3 rounded-lg bg-[#ffc107] text-gray-800 font-medium text-center hover:bg-[#e0a800]"
+                    >
+                      I'm a Traveler
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
+
             <div className="md:w-1/2">
               <div className="flex items-center justify-center h-64 md:h-96 w-full">
 
-                <Image 
-                  src="/images/HP5.png" 
+                <Image
+                  src="/images/HP5.png"
                   alt="Hewpao service illustration"
                   width={300}
                   height={300}
@@ -34,7 +86,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* Verification Service Section */}
-      <section className="py-16 bg-gray-50 rounded-xl mt-4">
+      <section className="py-16 bg-gray-50 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Product Verification Service</h2>
@@ -93,7 +145,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 bg-gray-50 rounded-xl mt-4">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Benefits of Using Hewpao</h2>
@@ -139,7 +191,7 @@ export default function LandingPageBody() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-[#493D9E] text-white rounded-xl mt-4">
+      <section className="py-16 bg-[#493D9E] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to get started?</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto">Join our community of travelers and buyers connecting across the globe.</p>
