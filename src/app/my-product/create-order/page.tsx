@@ -330,7 +330,7 @@ function CreateOrderPage() {
                   className={`mt-1 block w-full rounded-md border ${
                     touched.desc && errors.desc 
                       ? "border-red-500 focus:border-red-500 focus:ring-red-500" 
-                      : "border-gray-300 ffocus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                      : "border-gray-300 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                   } px-3 py-2 text-sm`}
                   required
                   placeholder="Enter product details like model, size, color, etc."
