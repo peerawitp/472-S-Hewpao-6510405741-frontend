@@ -49,7 +49,7 @@ const ImageUpload = ({
 
       <div
         {...getRootProps()}
-        className={`border-2 border-dashed rounded-md p-4 hover:border-blue-500 ${isDragActive ? "border-blue-500" : "border-gray-300"}`}
+        className={`border-2 border-dashed rounded-md p-4 hover:border-primary ${isDragActive ? "border-primary" : "border-gray-300"}`}
       >
         <input {...getInputProps()} />
         <p className="text-center text-gray-500">
