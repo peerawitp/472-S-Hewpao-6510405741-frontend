@@ -368,7 +368,7 @@ function CreateOrderPage() {
                   value={orderData.budget}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  min="0"
+                  min="500"
                   step="100"
                   className={`mt-1 block w-full rounded-md border ${
                     touched.budget && errors.budget 

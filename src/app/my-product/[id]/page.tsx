@@ -226,6 +226,7 @@ function Page() {
                                     <div className="text-gray-500">Quantity</div>
                                     <input
                                         type="number"
+                                        min="1"
                                         value={editedQuantity}
                                         onChange={(e) => setEditedQuantity(Number(e.target.value))}
                                         className="border p-2 w-full rounded-lg"
