@@ -9,25 +9,32 @@ import {
   useCancelProductRequest,
 } from "@/api/productRequest/useProductRequest";
 import Link from "next/link";
+import Image from "next/image";
 import { ResponseOffer } from "@/dtos/Offer";
 import OfferDetails from "../component/OfferDetails";
 import { DeliveryStatus } from "@/interfaces/ProductRequest";
 import { useCheckout } from "@/api/checkout/useCheckout";
+import { GetProductRequestResponseDTO } from "@/dtos/productRequest";
 
 function Page() {
-  const router = useParams();
-  const { id } = router;
+  const param = useParams();
+  const router = useRouter();
 
-  const { data: product, isLoading: loading } = useGetProductRequestByID(
+  const { id } = param;
+
+  const { data: productData, isLoading: loading } = useGetProductRequestByID(
     Number(id),
   );
+
+  const product = productData?.["product-request"] as GetProductRequestResponseDTO;
+
   const useUpdateProduct = useUpdateProductRequest(Number(id));
   const useCancelProduct = useCancelProductRequest(Number(id));
   const useCheckoutHook = useCheckout();
   const routerNavigation = useRouter();
 
   const offerList: number[] =
-    product?.["product-request"].offers?.map(
+  product?.offers.map(
       (offer: ResponseOffer) => offer.ID,
     ) || [];
 
@@ -40,13 +47,13 @@ function Page() {
   const categories = ["Electronics", "Fashion", "Food", "Books", "Other"];
 
   React.useEffect(() => {
-    if (product?.["product-request"]) {
-      setEditedName(product?.["product-request"]?.name);
-      setEditedDesc(product?.["product-request"]?.desc);
-      setEditedCategory(product?.["product-request"]?.category);
-      setEditedQuantity(product?.["product-request"]?.quantity);
+    if (product) {
+      setEditedName(product?.name);
+      setEditedDesc(product?.desc);
+      setEditedCategory(product?.category);
+      setEditedQuantity(product?.quantity);
     }
-  }, [product]);
+  }, [productData]);
 
   if (loading) {
     return (
@@ -99,16 +106,16 @@ function Page() {
 
   const handleCancelClick = () => {
     setIsEditing(false);
-    setEditedName(product!["product-request"]?.name);
-    setEditedDesc(product!["product-request"]?.desc);
-    setEditedCategory(product!["product-request"]?.category);
-    setEditedQuantity(product!["product-request"]?.quantity);
+    setEditedName(product.name);
+    setEditedDesc(product.desc);
+    setEditedCategory(product.category);
+    setEditedQuantity(product.quantity);
   };
 
   const handleCheckoutStripe = () => {
     useCheckoutHook.mutate(
       {
-        product_request_id: product?.["product-request"]?.id as number,
+        product_request_id: product?.id as number,
         payment_gateway: "stripe",
       },
       {
@@ -121,6 +128,13 @@ function Page() {
       },
     );
   };
+
+  const handleChat = () => {
+    console.log("Test chat")
+    if (product?.id) {
+      router.push(`/chat/${product.id}`);
+    }
+  }
 
   return (
       <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
