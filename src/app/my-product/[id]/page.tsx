@@ -139,7 +139,7 @@ function Page() {
         <div className="flex flex-col justify-center md:flex-row gap-6 p-4 font-sans">
             <div className="flex flex-col gap-4 bg-white rounded-lg shadow-md p-6 w-full md:w-1/2">
                 <Link
-                    className="border p-2 rounded-md w-fit"
+                    className="bg-gray-200 px-3 py-2 rounded-md w-fit shadow-md hover:bg-gray-300 ease-in-out duration-300"
                     href={`/my-product`}
                     passHref
                 >
@@ -156,7 +156,7 @@ function Page() {
                         <button
                             onClick={handleChat}
                             disabled={product.selected_offer_id === null}
-                            className={`px-3 py-1 rounded-lg font-semibold transition duration-200
+                            className={`px-3 py-1 rounded-lg font-semibold shadow-md transition duration-300
                 ${product.selected_offer_id === null ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-primary hover:bg-dark-primary text-white"}
               `}
                         >
