@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./component/Navbar";
 import NextAuthProvider from "@/provider/NextAuthProvider";
 import QueryClientProvider from "@/provider/QueryClientProvider";
+import { PublicEnvScript } from "next-runtime-env";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,6 +26,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        <PublicEnvScript />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -34,9 +38,7 @@ export default function RootLayout({
               <header className="sticky top-0 z-50 bg-white shadow-sm">
                 <Navbar />
               </header>
-              <main className="flex-grow">
-                {children}
-              </main>
+              <main className="flex-grow">{children}</main>
             </div>
           </QueryClientProvider>
         </NextAuthProvider>
@@ -44,3 +46,4 @@ export default function RootLayout({
     </html>
   );
 }
+
